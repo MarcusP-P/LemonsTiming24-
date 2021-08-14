@@ -27,6 +27,7 @@ app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
+app.UseWebSockets();
 
 app.UseRouting();
 

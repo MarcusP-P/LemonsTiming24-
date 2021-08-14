@@ -1,7 +1,79 @@
 ﻿@page "/"
+@using LemonsTiming24.SharedCode
+@using System.Net.WebSockets
+@using System.Text
+@inject HttpClient Http
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+@if (webSocketEndpoint is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<p>WebsocketUrl is @webSocketEndpoint.Url</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+	@if(webSocket.State != WebSocketState.Open)
+	{
+		<p>Connecting to WebSocket... WebSocket state is @webSocket.State.ToString()</p>
+}
+	else
+	{
+		<form @onsubmit="@SendMessageAsync">
+			Message: <input @bind="@message" />
+			<button type="submit">Send</button>
+		</form>
+
+		<pre>@log</pre>		
+	}
+}
+
+@code {
+	private WebSocketUrl? webSocketEndpoint;
+
+	protected override async Task OnInitializedAsync()
+	{
+		webSocketEndpoint = await Http.GetFromJsonAsync<WebSocketUrl>("api/v1/WebSocket");
+		if (webSocketEndpoint is not null)
+		{
+			await webSocket.ConnectAsync(new Uri(webSocketEndpoint.Url), disposalTokenSource.Token);
+			_ = ReceiveLoop();
+		}
+
+	}
+
+
+	CancellationTokenSource disposalTokenSource = new CancellationTokenSource();
+	ClientWebSocket webSocket = new ClientWebSocket();
+	string message = "Hello, WebSocket!";
+	string log = "";
+
+	async Task SendMessageAsync()
+	{
+		log += $"Sending: {message}\n";
+		var dataToSend = new ArraySegment<byte>(Encoding.UTF8.GetBytes(message));
+		await webSocket.SendAsync(dataToSend, WebSocketMessageType.Text, true, disposalTokenSource.Token);
+	}
+
+	async Task ReceiveLoop()
+	{
+		var buffer = new ArraySegment<byte>(new byte[1024]);
+		while (!disposalTokenSource.IsCancellationRequested)
+		{
+			// Note that the received block might only be part of a larger message. If this applies in your scenario,
+			// check the received.EndOfMessage and consider buffering the blocks until that property is true.
+			// Or use a higher-level library such as SignalR.
+			var received = await webSocket.ReceiveAsync(buffer, disposalTokenSource.Token);
+			var receivedAsText = Encoding.UTF8.GetString(buffer.Array!, 0, received.Count);
+			log += $"Received: {receivedAsText}\n";
+			StateHasChanged();
+		}
+	}
+
+	public void Dispose()
+	{
+		disposalTokenSource.Cancel();
+		_ = webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Bye", CancellationToken.None);
+	}
+}
