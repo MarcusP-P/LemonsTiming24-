@@ -9,6 +9,7 @@ namespace LemonsTiming24.Server.Controllers;
 public class WebSocketController : ControllerBase
 {
     private const string websocketEndpoint = "/ws";
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "I'll use it later")]
     private readonly ILogger<WebSocketController> logger;
 
     public WebSocketController(ILogger<WebSocketController> logger)
@@ -16,6 +17,10 @@ public class WebSocketController : ControllerBase
         this.logger = logger;
     }
 
+    /// <summary>
+    /// Gets the endpoint of the WebSocket URL
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public WebSocketUrl Get()
     {
