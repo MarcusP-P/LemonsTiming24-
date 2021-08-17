@@ -1,10 +1,15 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using LemonsTiming24.Server.Infrastructure;
+using LemonsTiming24.Server.Infrastructure.BackgroundProcessing;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "LemonsTiming24.Server", Version = "v1" }));
+
+builder.Services.Configure<TimingConfiguration>(builder.Configuration.GetSection("Timing"));
 
 var app = builder.Build();
 
