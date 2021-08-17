@@ -1,5 +1,5 @@
 ﻿using LemonsTiming24.Server.Infrastructure;
-using LemonsTiming24.Server.Infrastructure.BackgroundProcessing;
+using LemonsTiming24.Server.Services.BackgroundProcessing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +10,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "LemonsTiming24.Server", Version = "v1" }));
 
 builder.Services.Configure<TimingConfiguration>(builder.Configuration.GetSection("Timing"));
+
+builder.Services.AddHostedService<TimingDataFetcherHostedService>();
+builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
 
 var app = builder.Build();
 
