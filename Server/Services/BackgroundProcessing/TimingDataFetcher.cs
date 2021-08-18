@@ -230,11 +230,11 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         var extension = "txt";
         try
         {
-            extension = "json";
             var jsonDocument = JsonDocument.Parse(document);
 
             try
             {
+                extension = "json";
                 var root = jsonDocument.RootElement;
 
                 if (root.ValueKind == JsonValueKind.Array)
