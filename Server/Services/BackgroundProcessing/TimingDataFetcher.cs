@@ -33,76 +33,85 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         // The higher level Socket.Io protocol is described at https://github.com/socketio/socket.io-protocol/tree/v4
         while (!cancellationToken.IsCancellationRequested)
         {
-            var randomString = GetRandomString(7);
-
-            var configurationResponse = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}", cancellationToken);
-
-            var rawParser = new EngineIoParser(configurationResponse);
-            var parsedResult = rawParser.ParseHttpResult();
-
-            foreach (var packet in parsedResult)
+            try
             {
-                await this.HandleEngineIoPacket(packet, cancellationToken);
-            }
+                var randomString = GetRandomString(7);
 
-            randomString = GetRandomString(7);
-            var raceResponse = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}&sid={this.sid}", cancellationToken);
+                var configurationResponse = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}", cancellationToken);
 
-            rawParser = new EngineIoParser(raceResponse);
-            parsedResult = rawParser.ParseHttpResult();
+                var rawParser = new EngineIoParser(configurationResponse);
+                var parsedResult = rawParser.ParseHttpResult();
 
-            foreach (var packet in parsedResult)
-            {
-                await this.HandleEngineIoPacket(packet, cancellationToken);
-            }
-            /*
-                        randomString = GetRandomString(7);
-                        await this.webSocket.ConnectAsync(new Uri($"wss://data.fiawec.6tm.eu/socket.io/?EIO=3&transport=websocket&t={randomString}&sid={this.sid}"), cancellationToken);
-                        this.useWebSocket = true;
-                        this.connectionUpgraded = false;
+                foreach (var packet in parsedResult)
+                {
+                    await this.HandleEngineIoPacket(packet, cancellationToken);
+                }
 
-                        await this.SendMessage(new EngineIoPacket
-                        {
-                            Flags = EngineIoMessageType.Ping,
-                            Payload = "probe",
-                        }, cancellationToken);
+                randomString = GetRandomString(7);
+                var raceResponse = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}&sid={this.sid}", cancellationToken);
 
-                        var counter = 0;
+                rawParser = new EngineIoParser(raceResponse);
+                parsedResult = rawParser.ParseHttpResult();
 
-                        var buffer = new ArraySegment<byte>(new byte[65536]);
-                        var result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
+                foreach (var packet in parsedResult)
+                {
+                    await this.HandleEngineIoPacket(packet, cancellationToken);
+                }
+                /*
+                            randomString = GetRandomString(7);
+                            await this.webSocket.ConnectAsync(new Uri($"wss://data.fiawec.6tm.eu/socket.io/?EIO=3&transport=websocket&t={randomString}&sid={this.sid}"), cancellationToken);
+                            this.useWebSocket = true;
+                            this.connectionUpgraded = false;
 
-                        while (!cancellationToken.IsCancellationRequested && !result.CloseStatus.HasValue)
-                        {
-                            // Note that the received block might only be part of a larger message. If this applies in your scenario,
-                            // check the received.EndOfMessage and consider buffering the blocks until that property is true.
-                            var receivedAsText = Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
-
-                            rawParser = new EngineIoParser(receivedAsText);
-                            parsedResult = rawParser.ParseWebSocketResult();
-
-                            foreach (var packet in parsedResult)
+                            await this.SendMessage(new EngineIoPacket
                             {
-                                await this.HandleEngineIoPacket(packet, cancellationToken);
-                            }
+                                Flags = EngineIoMessageType.Ping,
+                                Payload = "probe",
+                            }, cancellationToken);
 
-                            counter++;
+                            var counter = 0;
 
-                            if (counter == 10)
+                            var buffer = new ArraySegment<byte>(new byte[65536]);
+                            var result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
+
+                            while (!cancellationToken.IsCancellationRequested && !result.CloseStatus.HasValue)
                             {
-                                await this.SendMessage(new EngineIoPacket
+                                // Note that the received block might only be part of a larger message. If this applies in your scenario,
+                                // check the received.EndOfMessage and consider buffering the blocks until that property is true.
+                                var receivedAsText = Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
+
+                                rawParser = new EngineIoParser(receivedAsText);
+                                parsedResult = rawParser.ParseWebSocketResult();
+
+                                foreach (var packet in parsedResult)
                                 {
-                                    Flags = EngineIoMessageType.Ping,
-                                    Payload = "probe",
-                                }, cancellationToken);
+                                    await this.HandleEngineIoPacket(packet, cancellationToken);
+                                }
 
-                                counter = 0;
+                                counter++;
+
+                                if (counter == 10)
+                                {
+                                    await this.SendMessage(new EngineIoPacket
+                                    {
+                                        Flags = EngineIoMessageType.Ping,
+                                        Payload = "probe",
+                                    }, cancellationToken);
+
+                                    counter = 0;
+                                }
+
+                                result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
                             }
+                */
+                await Task.Delay(1000, cancellationToken);
 
-                            result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
-                        }
-            */
-            await Task.Delay(1000, cancellationToken);
+            }
+            // If we get an exception, we jsut want to go through again.
+            catch
+            {
+
+            }
         }
 
         static string GetRandomString(int length)
