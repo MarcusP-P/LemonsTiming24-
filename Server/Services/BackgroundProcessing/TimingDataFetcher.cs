@@ -102,7 +102,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
                             result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
                         }
             */
-            await Task.Delay(5000, cancellationToken);
+            await Task.Delay(1000, cancellationToken);
         }
 
         static string GetRandomString(int length)
@@ -171,7 +171,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
                     // TODO: Handle message
                     if (data.Length > 0)
                     {
-                        System.Diagnostics.Debug.Print(data[0..Math.Max(40, data.Length)]);
+                        await this.WriteJsonDocument(data);
                     }
                 }
 
@@ -215,17 +215,52 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         }
     }
 
-    private static async Task WriteJsonDocument(DateTime dateTime, string document)
+    private async Task WriteJsonDocument(string document)
     {
-        var name = "";
+        var name = "unknown";
+        var extension = "txt";
+        try
+        {
+            extension = "json";
+            var jsonDocument = JsonDocument.Parse(document);
 
-        var jsonDocument = JsonDocument.Parse(document);
+            try
+            {
+                var root = jsonDocument.RootElement;
 
-        var fileName = $"{dateTime:o}-{name}.json".Replace(":", "-");
+                if (root.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var currentNode in root.EnumerateArray())
+                    {
+                        if (currentNode.ValueKind == JsonValueKind.String)
+                        {
+                            name = currentNode.GetString();
+                            if (name is not null)
+                            {
+                                name = string.Join("", name.Split(Path.GetInvalidFileNameChars()));
 
-        var json = JsonSerializer.Serialize(jsonDocument, new JsonSerializerOptions { WriteIndented = true });
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
 
-        await File.WriteAllTextAsync(fileName, json);
+            document = JsonSerializer.Serialize(jsonDocument, new JsonSerializerOptions { WriteIndented = true });
+
+        }
+        catch
+        {
+        }
+
+        var fileName = $"{name}-{DateTime.UtcNow:o}.{extension}".Replace(":", "-");
+
+        var path = Path.Join(this.timingConfiguration.Value.SavedMessagesPath, fileName);
+
+        await File.WriteAllTextAsync(path, document);
     }
 
     public void Dispose()
