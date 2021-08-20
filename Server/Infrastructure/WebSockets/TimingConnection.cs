@@ -21,7 +21,7 @@ public class TimingConnection
     {
         if (this.connection.CloseStatus is not null && this.connection.State == WebSocketState.Open)
         {
-            await this.connection.CloseAsync(WebSocketCloseStatus.NormalClosure, "Complete", new ());
+            await this.connection.CloseAsync(WebSocketCloseStatus.NormalClosure, "Complete", new());
         }
 
         _ = this.connectionTcs.TrySetResult(null);

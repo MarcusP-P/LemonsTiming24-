@@ -22,6 +22,5 @@ public class WebSocketConnectionService : IWebSocketConnectionService
         {
             await connection.CloseAsync();
         }
-
     }
 }
