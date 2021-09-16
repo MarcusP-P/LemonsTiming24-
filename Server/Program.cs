@@ -12,7 +12,8 @@ builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "LemonsTi
 builder.Services.Configure<TimingConfiguration>(builder.Configuration.GetSection("Timing"));
 
 builder.Services.AddHostedService<TimingDataFetcherHostedService>();
-builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
+//builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
+builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcherTest>();
 
 var app = builder.Build();
 
@@ -38,6 +39,7 @@ app.UseStaticFiles();
 app.UseWebSockets();
 
 app.UseRouting();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
