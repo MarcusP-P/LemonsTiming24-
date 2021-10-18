@@ -28,14 +28,14 @@ public class EngineIoParser
             var seperatorPosition = currentString.IndexOf(':');
 
             // Anything before the first colon is the length
-            var lengthString = currentString.Substring(0, seperatorPosition);
+            var lengthString = currentString[..seperatorPosition];
             var length = int.Parse(lengthString, NumberStyles.None, CultureInfo.InvariantCulture);
 
             // Trim the length from the start of the string
             currentString = currentString[(seperatorPosition + 1)..];
 
             // Get the data portion of the string
-            var data = currentString.Substring(0, length);
+            var data = currentString[..length];
 
             // Trim the current data from teh stat of our packet.
             currentString = currentString[length..];
@@ -62,7 +62,7 @@ public class EngineIoParser
 
     public static EngineIoPacket CreateEngineIoPacket(string data)
     {
-        var messageTypeField = data.Substring(0, 1);
+        var messageTypeField = data[..1];
         var message = data[1..];
 
         var messageType = ConvertIntToFlag(messageTypeField);
