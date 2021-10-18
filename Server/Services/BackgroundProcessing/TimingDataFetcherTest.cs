@@ -32,7 +32,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             System.Diagnostics.Debug.Print($"Extracting {file}");
             foreach (var foo2 in foo.RootElement.EnumerateArray())
             {
-                if (foo2.ValueKind==JsonValueKind.Object)
+                if (foo2.ValueKind == JsonValueKind.Object)
                 {
                     var foo3 = JsonSerializer.Deserialize<RaceRaw>(foo2.GetRawText());
                 }
