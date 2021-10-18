@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "LemonsTiming24.Server", Version = "v1" }));
 
 builder.Services.Configure<TimingConfiguration>(builder.Configuration.GetSection("Timing"));
@@ -22,6 +24,7 @@ if (app.Environment.IsDevelopment())
 {
     _ = app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
+
     _ = app.UseSwagger();
     _ = app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LemonsTiming24.Server v1"));
 }
