@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using LemonsTiming24.Shared;
 
 namespace LemonsTiming24.Server.Controllers;
 
