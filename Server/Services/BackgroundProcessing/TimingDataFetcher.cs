@@ -5,12 +5,19 @@ using File = System.IO.File;
 using Microsoft.Extensions.Options;
 using LemonsTiming24.Server.Services.SocketIo;
 using LemonsTiming24.Server.Infrastructure;
+using System.Net.Sockets;
+using System.Data;
 
 namespace LemonsTiming24.Server.Services.BackgroundProcessing;
 public class TimingDataFetcher : ITimingDataFetcher, IDisposable
 {
     private readonly IOptions<TimingConfiguration> timingConfiguration;
     private string sid = "";
+    private TimeSpan pingInterval;
+    private TimeSpan pingTimeout;
+
+    private DateTime lastSentPing;
+
     private bool useWebSocket;
     private bool connectionUpgraded;
 
@@ -20,6 +27,9 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     public TimingDataFetcher(IOptions<TimingConfiguration> timingConfiguration)
     {
         this.timingConfiguration = timingConfiguration;
+        this.pingInterval = TimeSpan.FromMilliseconds(25000);
+        this.pingTimeout = TimeSpan.FromMilliseconds(5000);
+        this.lastSentPing = DateTime.Now;
     }
 
     public async Task DoWork(CancellationToken cancellationToken)
@@ -28,6 +38,12 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         this.webSocket = new ClientWebSocket();
         this.http = new HttpClient { BaseAddress = new Uri($"{this.timingConfiguration.Value.BaseUrl}/{this.timingConfiguration.Value.SocketPath}/") };
 
+        string response;
+        DateTime connectionStart;
+        var connectionDuration = TimeSpan.FromSeconds(0);
+        var requestStart = DateTime.Now;
+        TimeSpan requestDuration;
+
         // The timing server uses Engine.Io and Socket.Io to exchange data.
         // The lower level Engine.Io protocol is described at https://github.com/socketio/engine.io-protocol/tree/v3
         // The higher level Socket.Io protocol is described at https://github.com/socketio/socket.io-protocol/tree/v4
@@ -35,98 +51,132 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         {
             try
             {
+                response = "";
+
                 var randomString = GetRandomString(7);
+                System.Diagnostics.Debug.Print("## Initial request");
+                this.lastSentPing = DateTime.Now;
+                requestStart = DateTime.Now;
+                response = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}", cancellationToken);
+                requestDuration = DateTime.Now - requestStart;
 
-                var configurationResponse = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}", cancellationToken);
+                connectionStart = DateTime.Now;
+                connectionDuration = TimeSpan.FromSeconds(0);
 
-                var rawParser = new EngineIoParser(configurationResponse);
+                var rawParser = new EngineIoParser(response);
                 var parsedResult = rawParser.ParseHttpResult();
 
-                foreach (var packet in parsedResult)
-                {
-                    await this.HandleEngineIoPacket(packet, cancellationToken);
-                }
-
-                randomString = GetRandomString(7);
-                var raceResponse = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}&sid={this.sid}", cancellationToken);
-
-                rawParser = new EngineIoParser(raceResponse);
-                parsedResult = rawParser.ParseHttpResult();
+                System.Diagnostics.Debug.Print($"#### Initial packet (duration {requestDuration:c})");
 
                 foreach (var packet in parsedResult)
                 {
                     await this.HandleEngineIoPacket(packet, cancellationToken);
                 }
-                /*
-                            randomString = GetRandomString(7);
-                            await this.webSocket.ConnectAsync(new Uri($"wss://data.fiawec.6tm.eu/socket.io/?EIO=3&transport=websocket&t={randomString}&sid={this.sid}"), cancellationToken);
-                            this.useWebSocket = true;
-                            this.connectionUpgraded = false;
 
-                            await this.SendMessage(new EngineIoPacket
-                            {
-                                Flags = EngineIoMessageType.Ping,
-                                Payload = "probe",
-                            }, cancellationToken);
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    if (DateTime.Now - this.lastSentPing > this.pingInterval)
+                    {
+                        await this.SendMessage(new EngineIoPacket
+                        {
+                            Flags = EngineIoMessageType.Ping,
+                            Payload = "",
+                        }, cancellationToken);
 
-                            var counter = 0;
+                    }
+                    response = "";
+                    randomString = GetRandomString(7);
 
-                            var buffer = new ArraySegment<byte>(new byte[65536]);
-                            var result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
+                    connectionDuration = DateTime.Now - connectionStart;
 
-                            while (!cancellationToken.IsCancellationRequested && !result.CloseStatus.HasValue)
-                            {
-                                // Note that the received block might only be part of a larger message. If this applies in your scenario,
-                                // check the received.EndOfMessage and consider buffering the blocks until that property is true.
-                                var receivedAsText = Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
+                    requestStart = DateTime.Now;
+                    response = await this.http.GetStringAsync($"?EIO=3&transport=polling&t={randomString}&sid={this.sid}", cancellationToken);
+                    requestDuration = DateTime.Now - requestStart;
 
-                                rawParser = new EngineIoParser(receivedAsText);
-                                parsedResult = rawParser.ParseWebSocketResult();
+                    rawParser = new EngineIoParser(response);
+                    parsedResult = rawParser.ParseHttpResult();
 
-                                foreach (var packet in parsedResult)
+                    System.Diagnostics.Debug.Print($"#### Packet: {parsedResult.Length} items. (duration {requestDuration:c}");
+
+                    foreach (var packet in parsedResult)
+                    {
+                        await this.HandleEngineIoPacket(packet, cancellationToken);
+                    }
+                    /*
+                                randomString = GetRandomString(7);
+                                await this.webSocket.ConnectAsync(new Uri($"wss://data.fiawec.6tm.eu/socket.io/?EIO=3&transport=websocket&t={randomString}&sid={this.sid}"), cancellationToken);
+                                this.useWebSocket = true;
+                                this.connectionUpgraded = false;
+
+                                await this.SendMessage(new EngineIoPacket
                                 {
-                                    await this.HandleEngineIoPacket(packet, cancellationToken);
-                                }
+                                    Flags = EngineIoMessageType.Ping,
+                                    Payload = "probe",
+                                }, cancellationToken);
 
-                                counter++;
+                                var counter = 0;
 
-                                if (counter == 10)
+                                var buffer = new ArraySegment<byte>(new byte[65536]);
+                                var result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
+
+                                while (!cancellationToken.IsCancellationRequested && !result.CloseStatus.HasValue)
                                 {
-                                    await this.SendMessage(new EngineIoPacket
+                                    // Note that the received block might only be part of a larger message. If this applies in your scenario,
+                                    // check the received.EndOfMessage and consider buffering the blocks until that property is true.
+                                    var receivedAsText = Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
+
+                                    rawParser = new EngineIoParser(receivedAsText);
+                                    parsedResult = rawParser.ParseWebSocketResult();
+
+                                    foreach (var packet in parsedResult)
                                     {
-                                        Flags = EngineIoMessageType.Ping,
-                                        Payload = "probe",
-                                    }, cancellationToken);
+                                        await this.HandleEngineIoPacket(packet, cancellationToken);
+                                    }
 
-                                    counter = 0;
+                                    counter++;
+
+                                    if (counter == 10)
+                                    {
+                                        await this.SendMessage(new EngineIoPacket
+                                        {
+                                            Flags = EngineIoMessageType.Ping,
+                                            Payload = "probe",
+                                        }, cancellationToken);
+
+                                        counter = 0;
+                                    }
+
+                                    result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
                                 }
-
-                                result = await this.webSocket.ReceiveAsync(buffer, cancellationToken);
-                            }
-                */
-                await Task.Delay(1000, cancellationToken);
-
+                    */
+                    await Task.Delay(1000, cancellationToken);
+                }
             }
             // If we get an exception, we jsut want to go through again.
-            catch
+            catch (HttpRequestException ex)
             {
-
+                requestDuration = DateTime.Now - requestStart;
+                System.Diagnostics.Debug.Print($"Exception: {ex.Message} Connection duration: {connectionDuration:c}, Request Duration: {requestDuration:c}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Print($"Exception: {ex.Message}");
             }
         }
 
-        static string GetRandomString(int length)
+    }
+    private static string GetRandomString(int length)
+    {
+        var stringBuilder = new StringBuilder();
+
+        while (stringBuilder.Length < length)
         {
-            var stringBuilder = new StringBuilder();
-
-            while (stringBuilder.Length < length)
-            {
-                _ = stringBuilder.Append(Path.GetRandomFileName().Replace(".", ""));
-            }
-
-            var result = stringBuilder.ToString(0, length);
-
-            return result;
+            _ = stringBuilder.Append(Path.GetRandomFileName().Replace(".", ""));
         }
+
+        var result = stringBuilder.ToString(0, length);
+
+        return result;
     }
 
     private async Task HandleEngineIoPacket(EngineIoPacket packet, CancellationToken cancellationToken)
@@ -137,9 +187,11 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
                 System.Diagnostics.Debug.Print("###### Open");
                 var configurationJson = JsonDocument.Parse(packet.Payload);
 
-                //await WriteJsonDocument(timeStamp, "configuration", configurationJson);
+                //await WriteJsonDocument(DateTime.Now, "configuration", configurationJson);
 
                 this.sid = configurationJson.RootElement.GetProperty("sid").GetString() ?? "";
+                this.pingInterval = TimeSpan.FromMilliseconds(configurationJson.RootElement.GetProperty("pingInterval").GetInt32());
+                this.pingTimeout = TimeSpan.FromMilliseconds(configurationJson.RootElement.GetProperty("pingTimeout").GetInt32());
                 this.connectionUpgraded = this.useWebSocket == false;
 
                 break;
@@ -169,7 +221,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
 
                 break;
             case EngineIoMessageType.Message:
-                System.Diagnostics.Debug.Print("###### Message");
+                //System.Diagnostics.Debug.Print("###### Message");
                 var data = packet.Payload;
                 if (this.connectionUpgraded)
                 {
@@ -202,7 +254,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     }
     private async Task SendMessage(EngineIoPacket packet, CancellationToken cancellationToken)
     {
-        var data = string.Concat(packet.Flags switch
+        var data = string.Concat(packet.Payload.Length + 1, ":", packet.Flags switch
         {
             EngineIoMessageType.Open => "0",
             EngineIoMessageType.Close => "1",
@@ -215,7 +267,16 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         }, packet.Payload);
         if (!this.useWebSocket)
         {
-            throw new NotImplementedException();
+            var randomString = GetRandomString(7);
+
+            var content = new StringContent(data);
+
+            this.lastSentPing = DateTime.Now;
+
+            var response = await this.http.PostAsync($"?EIO=3&transport=polling&t={randomString}&sid={this.sid}", content, cancellationToken);
+
+            System.Diagnostics.Debug.Print(await response.Content.ReadAsStringAsync(cancellationToken));
+
         }
         else
         {
@@ -228,6 +289,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     {
         var name = "unknown";
         var extension = "txt";
+        var handleTime = DateTime.UtcNow;
         try
         {
             var jsonDocument = JsonDocument.Parse(document);
@@ -248,6 +310,8 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
                             {
                                 name = string.Join("", name.Split(Path.GetInvalidFileNameChars()));
 
+                                //System.Diagnostics.Debug.WriteLine($"######## Message type: {name}, handeled at {handleTime:o}");
+
                                 break;
                             }
                         }
@@ -265,7 +329,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         {
         }
 
-        var fileName = $"{name}-{DateTime.UtcNow:o}.{extension}".Replace(":", "-");
+        var fileName = $"{name}-{handleTime:o}.{extension}".Replace(":", "-");
 
         var path = Path.Join(this.timingConfiguration.Value.SavedMessagesPath, fileName);
 
