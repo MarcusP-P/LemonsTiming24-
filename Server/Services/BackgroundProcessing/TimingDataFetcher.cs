@@ -10,8 +10,12 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     private SocketIO? client;
     private bool disposedValue;
 
+    private DateTime clientStartTime;
+
     public TimingDataFetcher(IOptions<TimingConfiguration> timingConfiguration)
     {
+        ArgumentNullException.ThrowIfNull(timingConfiguration, nameof(timingConfiguration));
+
         this.timingConfiguration = timingConfiguration;
     }
 
@@ -19,13 +23,12 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     {
         try
         {
+
             this.client = new SocketIO(this.timingConfiguration.Value.BaseUrl, new SocketIOOptions
             {
                 AutoUpgrade = false,
                 EIO = 3,
             });
-
-            System.Diagnostics.Debug.Print("Foo");
 
             this.client.OnAny(async (eventName, response) =>
                 await this.WriteJsonDocument(eventName, response.ToString()));
@@ -34,14 +37,21 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
             this.client.OnReconnected += this.Client_OnReconnected;
             this.client.OnError += this.Client_OnError;
             this.client.OnDisconnected += this.Client_OnDisconnected;
+            this.client.OnReconnectAttempt += this.Client_OnReconnectAttempt;
 
+            this.clientStartTime = DateTime.Now;
             await this.client.ConnectAsync();
-
-            System.Diagnostics.Debug.Print("Foo3");
 
             while (!cancellationToken.IsCancellationRequested)
             {
+                await Task.Delay(15000, cancellationToken);
 
+                if (DateTime.Now - this.clientStartTime > TimeSpan.FromMinutes(5))
+                {
+                    System.Diagnostics.Debug.Print($"Forced Reconnect after {DateTime.Now - this.clientStartTime:c}");
+                    await this.client.DisconnectAsync();
+                    await this.client.ConnectAsync();
+                }
             }
         }
         catch (Exception ex)
@@ -49,7 +59,6 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
             System.Diagnostics.Debug.Print($"Exception: {ex.Message}");
         }
     }
-
     private async Task WriteJsonDocument(string name, string document)
     {
         name = string.Join("", name.Split(Path.GetInvalidFileNameChars()));
@@ -83,7 +92,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
 
     private void Client_OnDisconnected(object? sender, string e)
     {
-        System.Diagnostics.Debug.Print($"##### Disconnect");
+        System.Diagnostics.Debug.Print($"##### Disconnect after {DateTime.Now - this.clientStartTime:c}: {e}");
     }
 
     private void Client_OnError(object? sender, string e)
@@ -98,7 +107,13 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
 
     private void Client_OnConnected(object? sender, EventArgs e)
     {
-        System.Diagnostics.Debug.Print($"Connected #######");
+        this.clientStartTime = DateTime.Now;
+        System.Diagnostics.Debug.Print($"Connected ####### {this.clientStartTime:f}");
+    }
+
+    private void Client_OnReconnectAttempt(object? sender, int e)
+    {
+        System.Diagnostics.Debug.Print($"###### Reconnect Attempt {DateTime.Now:f} #######");
     }
 
     // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
