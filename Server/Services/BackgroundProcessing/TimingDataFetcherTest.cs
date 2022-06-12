@@ -20,7 +20,8 @@ public class TimingDataFetcherTest : ITimingDataFetcher
     {
         var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.SavedMessagesPath ?? "");
         var fileList = directoryInfo.GetFiles()
-            .Where(x => x.Name.StartsWith("race-", StringComparison.InvariantCulture))
+            .Where(x => x.Name.StartsWith("race-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("entries-", StringComparison.InvariantCulture))
             .OrderBy(x => x.CreationTime)
             .ToArray();
         foreach (var file in fileList)
@@ -30,11 +31,25 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             var foo = JsonDocument.Parse(fileValue);
 
             System.Diagnostics.Debug.Print($"Extracting {file}");
-            foreach (var foo2 in foo.RootElement.EnumerateArray())
+            if (file.Name.StartsWith("race-", StringComparison.InvariantCulture) )
             {
-                if (foo2.ValueKind == JsonValueKind.Object)
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
                 {
-                    var foo3 = JsonSerializer.Deserialize<RaceRaw>(foo2.GetRawText());
+                    if (foo2.ValueKind == JsonValueKind.Object)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText());
+                    }
+                }
+            }
+
+            else if (file.Name.StartsWith("entries-", StringComparison.InvariantCulture))
+            {
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
+                {
+                    if (foo2.ValueKind == JsonValueKind.Array)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText());
+                    }
                 }
             }
         }
