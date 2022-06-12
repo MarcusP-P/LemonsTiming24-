@@ -3,126 +3,221 @@ using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "json DTO")]
+public class RaceArray
+{
+    public RaceRaw[] RawRaceArray { get; set; } = null!;
+}
+
 public class RaceRaw
 {
     [JsonPropertyName("params")]
-    public Params paramaters { get; set; } = null!;
-
-    public Progressflagstate[] progressFlagState { get; set; } = null!;
-    public Entry[] entries { get; set; } = null!;
-    public Bestsector[] bestSectors { get; set; } = null!;
+    public Params? Paramaters { get; set; }
+    [JsonPropertyName("progressFlagState")]
+    public Progressflagstate[]? ProgressFlagState { get; set; }
+    [JsonPropertyName("entries")]
+    public Entry[]? Entries { get; set; }
+    [JsonPropertyName("bestSectors")]
+    public Bestsector[]? BestSectors { get; set; }
+    [JsonPropertyName("bestTimesByCategory")]
+    public object[]? BestTimesByCategory { get; set; }
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "json DTO")]
 public class Params
 {
-    public float remaining { get; set; }
-    public float percentProgressLive { get; set; }
-    public int sessionType { get; set; }
-    public int svg { get; set; }
-    public string eventName { get; set; } = "";
-    public int sessionId { get; set; }
-    public string sessionName { get; set; } = "";
-    public int timestamp { get; set; }
-    public string safetyCar { get; set; } = "";
-    public float airTemp { get; set; }
-    public float trackTemp { get; set; }
-    public float humidity { get; set; }
-    public float pressure { get; set; }
-    public float windSpeed { get; set; }
-    public int windDirection { get; set; }
-    public float elapsedTime { get; set; }
-    public string? raceState { get; set; }
-    public long startTime { get; set; }
-    public int duration { get; set; }
-    public int stopTime { get; set; }
-    public bool replay { get; set; }
+    [JsonPropertyName("remaining")]
+    public float Remaining { get; set; }
+    [JsonPropertyName("percentProgressLive")]
+    public float PercentProgressLive { get; set; }
+    [JsonPropertyName("sessionType")]
+    public int SessionType { get; set; }
+    [JsonPropertyName("svg")]
+    public int Svg { get; set; }
+    [JsonPropertyName("eventName")]
+    public string EventName { get; set; } = "";
+    [JsonPropertyName("sessionId")]
+    public int SessionId { get; set; }
+    [JsonPropertyName("sessionName")]
+    public string SessionName { get; set; } = "";
+    [JsonPropertyName("timestamp")]
+    public int Timestamp { get; set; }
+    [JsonPropertyName("safetyCar")]
+    public string SafetyCar { get; set; } = "";
+    [JsonPropertyName("airTemp")]
+    public float AirTemp { get; set; }
+    [JsonPropertyName("trackTemp")]
+    public float TrackTemp { get; set; }
+    [JsonPropertyName("humidity")]
+    public int Humidity { get; set; }
+    [JsonPropertyName("pressure")]
+    public float Pressure { get; set; }
+    [JsonPropertyName("windSpeed")]
+    public float WindSpeed { get; set; }
+    [JsonPropertyName("windDirection")]
+    public int WindDirection { get; set; }
+    [JsonPropertyName("elapsedTime")]
+    public float ElapsedTime { get; set; }
+    [JsonPropertyName("raceState")]
+    public string RaceState { get; set; } = "";
+    [JsonPropertyName("startTime")]
+    public long StartTime { get; set; }
+    [JsonPropertyName("duration")]
+    public int Duration { get; set; }
+    [JsonPropertyName("stopTime")]
+    public int StopTime { get; set; }
+    [JsonPropertyName("stoppedSinceTime")]
+    public int StoppedSinceTime { get; set; }
+    [JsonPropertyName("replay")]
+    public bool Replay { get; set; }
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "json DTO")]
 public class Progressflagstate
 {
-    public float percentProgress { get; set; }
-    public long startTime { get; set; }
-    public bool current { get; set; }
-    public string state { get; set; } = "";
+    [JsonPropertyName("percentProgress")]
+    public float? PercentProgress { get; set; }
+    [JsonPropertyName("startTime")]
+    public long StartTime { get; set; }
+    [JsonPropertyName("current")]
+    public bool Current { get; set; }
+    [JsonPropertyName("state")]
+    public string State { get; set; } = "";
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "json DTO")]
 public class Entry
 {
-    public int categoryPosition { get; set; }
-    public int previousLastLap { get; set; }
-    public int ranking { get; set; }
-    public int positionChange { get; set; }
-    public int categoryRanking { get; set; }
-    public int categoryPositionChange { get; set; }
-    public string number { get; set; } = "";
-    public int id { get; set; }
-    public string team { get; set; } = "";
-    public string tyre { get; set; } = "";
-    public string driver { get; set; } = "";
-    public string car { get; set; } = "";
-    public int lap { get; set; }
-    public string gap { get; set; } = "";
-    public string gapPrev { get; set; } = "";
-    public string classGap { get; set; } = "";
-    public string classGapPrev { get; set; } = "";
-    public string lastlap { get; set; } = "";
-    public int lastlapTime { get; set; }
-    public int bestlapTime { get; set; }
-    public int pitstop { get; set; }
-    public string bestLap { get; set; } = "";
-    public string speed { get; set; } = "";
-    public int bestTimeSector1 { get; set; }
-    public int bestTimeSector2 { get; set; }
-    public int bestTimeSector3 { get; set; }
-    public string bestSector1 { get; set; } = "";
-    public string bestSector2 { get; set; } = "";
-    public string bestSector3 { get; set; } = "";
-    public string currentSector1 { get; set; } = "";
-    public string currentSector2 { get; set; } = "";
-    public string currentSector3 { get; set; } = "";
-    public int sector { get; set; }
-    public int driverId { get; set; }
-    public int categoryId { get; set; }
-    public string state { get; set; } = "";
-    public string category { get; set; } = "";
-    public string nationality { get; set; } = "";
-    public string avLaps { get; set; } = "";
-    public string averageTime { get; set; } = "";
-    public string time { get; set; } = "";
-    public string d1L1 { get; set; } = "";
-    public string d2L1 { get; set; } = "";
-    public int lastPassingTime { get; set; }
-    public Driver[] drivers { get; set; } = null!;
-    public string lastLapBestType { get; set; } = "";
-    public long positionChangeTime { get; set; }
+    [JsonPropertyName("categoryPosition")]
+    public int CategoryPosition { get; set; }
+    [JsonPropertyName("previousLastLap")]
+    public int PreviousLastLap { get; set; }
+    [JsonPropertyName("ranking")]
+    public int Ranking { get; set; }
+    [JsonPropertyName("positionChange")]
+    public int PositionChange { get; set; }
+    [JsonPropertyName("categoryRanking")]
+    public int CategoryRanking { get; set; }
+    [JsonPropertyName("categoryPositionChange")]
+    public int CategoryPositionChange { get; set; }
+    [JsonPropertyName("number")]
+    public string Number { get; set; } = "";
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    [JsonPropertyName("team")]
+    public string Team { get; set; } = "";
+    [JsonPropertyName("tyre")]
+    public string Tyre { get; set; } = "";
+    [JsonPropertyName("driver")]
+    public string Driver { get; set; } = "";
+    [JsonPropertyName("bestLapDriver")]
+    public string BestLapDriver { get; set; } = "";
+    [JsonPropertyName("car")]
+    public string Car { get; set; } = "";
+    [JsonPropertyName("lap")]
+    public int Lap { get; set; }
+    [JsonPropertyName("gap")]
+    public string Gap { get; set; } = "";
+    [JsonPropertyName("gapPrev")]
+    public string GapPrev { get; set; } = "";
+    [JsonPropertyName("classGap")]
+    public string ClassGap { get; set; } = "";
+    [JsonPropertyName("classGapPrev")]
+    public string ClassGapPrev { get; set; } = "";
+    [JsonPropertyName("lastlap")]
+    public string Lastlap { get; set; } = "";
+    [JsonPropertyName("lastlapTime")]
+    public int LastlapTime { get; set; }
+    [JsonPropertyName("bestlapTime")]
+    public int BestlapTime { get; set; }
+    [JsonPropertyName("pitstop")]
+    public int Pitstop { get; set; }
+    [JsonPropertyName("bestLap")]
+    public string BestLap { get; set; } = "";
+    [JsonPropertyName("speed")]
+    public string Speed { get; set; } = "";
+    [JsonPropertyName("bestTimeSector1")]
+    public int BestTimeSector1 { get; set; }
+    [JsonPropertyName("bestTimeSector2")]
+    public int BestTimeSector2 { get; set; }
+    [JsonPropertyName("bestTimeSector3")]
+    public int BestTimeSector3 { get; set; }
+    [JsonPropertyName("bestSector1")]
+    public string BestSector1 { get; set; } = "";
+    [JsonPropertyName("bestSector2")]
+    public string BestSector2 { get; set; } = "";
+    [JsonPropertyName("bestSector3")]
+    public string BestSector3 { get; set; } = "";
+    [JsonPropertyName("currentSector1")]
+    public string? CurrentSector1 { get; set; }
+    [JsonPropertyName("currentSector2")]
+    public string? CurrentSector2 { get; set; }
+    [JsonPropertyName("currentSector3")]
+    public string? CurrentSector3 { get; set; }
+    [JsonPropertyName("sector")]
+    public int Sector { get; set; }
+    [JsonPropertyName("driverId")]
+    public int DriverId { get; set; }
+    [JsonPropertyName("categoryId")]
+    public int CategoryId { get; set; }
+    [JsonPropertyName("state")]
+    public string State { get; set; } = "";
+    [JsonPropertyName("category")]
+    public string Category { get; set; } = "";
+    [JsonPropertyName("nationality")]
+    public string Nationality { get; set; } = "";
+    [JsonPropertyName("avLaps")]
+    public string AvLaps { get; set; } = "";
+    [JsonPropertyName("averageTime")]
+    public string AverageTime { get; set; } = "";
+    [JsonPropertyName("time")]
+    public string Time { get; set; } = "";
+    [JsonPropertyName("d1L1")]
+    public string D1L1 { get; set; } = "";
+    [JsonPropertyName("d2L1")]
+    public string D2L1 { get; set; } = "";
+    [JsonPropertyName("lastPassingTime")]
+    public int LastPassingTime { get; set; }
+    [JsonPropertyName("drivers")]
+    public Driver[]? Drivers { get; set; }
+    [JsonPropertyName("lastLapBestType")]
+    public string LastLapBestType { get; set; } = "";
+    [JsonPropertyName("positionChangeTime")]
+    public long PositionChangeTime { get; set; }
+    [JsonPropertyName("categoryPositionChangeTime")]
+    public long CategoryPositionChangeTime { get; set; }
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "json DTO")]
 public class Driver
 {
+    [JsonPropertyName("ECM Country Id")]
     public string ECMCountryId { get; set; } = "";
+    [JsonPropertyName("ECM Driver Id")]
     public string ECMDriverId { get; set; } = "";
-    public string country { get; set; } = "";
-    public int dbId { get; set; }
-    public int driverId { get; set; }
-    public string firstName { get; set; } = "";
-    public string lastName { get; set; } = "";
-    public string license { get; set; } = "";
-    public int number { get; set; }
-    public string shortName { get; set; } = "";
+    [JsonPropertyName("country")]
+    public string Country { get; set; } = "";
+    [JsonPropertyName("dbId")]
+    public int DbId { get; set; }
+    [JsonPropertyName("driverId")]
+    public int DriverId { get; set; }
+    [JsonPropertyName("firstName")]
+    public string FirstName { get; set; } = "";
+    [JsonPropertyName("lastName")]
+    public string LastName { get; set; } = "";
+    [JsonPropertyName("license")]
+    public string License { get; set; } = "";
+    [JsonPropertyName("number")]
+    public int Number { get; set; }
+    [JsonPropertyName("shortName")]
+    public string ShortName { get; set; } = "";
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "json DTO")]
 public class Bestsector
 {
-    public string participant { get; set; } = "";
-    public int time { get; set; }
-    public int number { get; set; }
-    public string timeStr { get; set; } = "";
-    public int driver { get; set; }
+    [JsonPropertyName("driver")]
+    public int Driver { get; set; }
+    [JsonPropertyName("participant")]
+    public string Participant { get; set; } = "";
+    [JsonPropertyName("time")]
+    public int Time { get; set; }
+    [JsonPropertyName("number")]
+    public int Number { get; set; }
+    [JsonPropertyName("timeStr")]
+    public string TimeStr { get; set; } = "";
 }
-
