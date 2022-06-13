@@ -21,7 +21,9 @@ public class TimingDataFetcherTest : ITimingDataFetcher
         var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.SavedMessagesPath ?? "");
         var fileList = directoryInfo.GetFiles()
             .Where(x => x.Name.StartsWith("race-", StringComparison.InvariantCulture)
-                || x.Name.StartsWith("entries-", StringComparison.InvariantCulture))
+                || x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture))
             .OrderBy(x => x.CreationTime)
             .ToArray();
         foreach (var file in fileList)
@@ -31,7 +33,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             var foo = JsonDocument.Parse(fileValue);
 
             System.Diagnostics.Debug.Print($"Extracting {file}");
-            if (file.Name.StartsWith("race-", StringComparison.InvariantCulture) )
+            if (file.Name.StartsWith("race-", StringComparison.InvariantCulture))
             {
                 foreach (var foo2 in foo.RootElement.EnumerateArray())
                 {
@@ -49,6 +51,18 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText());
+                    }
+                }
+            }
+
+            else if (file.Name.StartsWith("params-", StringComparison.InvariantCulture)
+                || file.Name.StartsWith("race_light-", StringComparison.InvariantCulture))
+            {
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
+                {
+                    if (foo2.ValueKind == JsonValueKind.Array)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<Paramaters[]>(foo2.GetRawText());
                     }
                 }
             }
