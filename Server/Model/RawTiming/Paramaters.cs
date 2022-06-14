@@ -45,7 +45,7 @@ public class Paramaters
     [JsonPropertyName("stopTime")]
     public int StopTime { get; set; }
     [JsonPropertyName("stoppedSinceTime")]
-    public int StoppedSinceTime { get; set; }
+    public int? StoppedSinceTime { get; set; }
     [JsonPropertyName("replay")]
     public bool Replay { get; set; }
 }
