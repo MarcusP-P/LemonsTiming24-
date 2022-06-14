@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using LemonsTiming24.Server.Infrastructure.JsonConverters;
+using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
@@ -59,16 +60,28 @@ public class Entry
     [JsonPropertyName("bestTimeSector3")]
     public int BestTimeSector3 { get; set; }
     [JsonPropertyName("bestSector1")]
+    // in some situations, this is 0 rather than null
+    [JsonConverter(typeof(ZeroMeansNullToStringJsonConverter))]
     public string BestSector1 { get; set; } = "";
     [JsonPropertyName("bestSector2")]
+    // in some situations, this is 0 rather than null
+    [JsonConverter(typeof(ZeroMeansNullToStringJsonConverter))]
     public string BestSector2 { get; set; } = "";
     [JsonPropertyName("bestSector3")]
+    // in some situations, this is 0 rather than null
+    [JsonConverter(typeof(ZeroMeansNullToStringJsonConverter))]
     public string BestSector3 { get; set; } = "";
     [JsonPropertyName("currentSector1")]
+    // in some situations, this is 0 rather than null
+    [JsonConverter(typeof(ZeroMeansNullToStringJsonConverter))]
     public string? CurrentSector1 { get; set; }
     [JsonPropertyName("currentSector2")]
+    // in some situations, this is 0 rather than null
+    [JsonConverter(typeof(ZeroMeansNullToStringJsonConverter))]
     public string? CurrentSector2 { get; set; }
     [JsonPropertyName("currentSector3")]
+    // in some situations, this is 0 rather than null
+    [JsonConverter(typeof(ZeroMeansNullToStringJsonConverter))]
     public string? CurrentSector3 { get; set; }
     [JsonPropertyName("sector")]
     public int Sector { get; set; }
@@ -79,6 +92,7 @@ public class Entry
     [JsonPropertyName("state")]
     public string State { get; set; } = "";
     [JsonPropertyName("category")]
+    [JsonConverter(typeof(NumericOrStringToStringJsonConverter))]
     public string Category { get; set; } = "";
     [JsonPropertyName("nationality")]
     public string Nationality { get; set; } = "";
