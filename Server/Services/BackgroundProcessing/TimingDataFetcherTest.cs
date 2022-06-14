@@ -24,15 +24,18 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 || x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture))
-            .OrderBy(x => x.CreationTime)
+            .OrderBy(x => x.Name.Remove(0, x.Name.IndexOf("-", StringComparison.InvariantCulture) + 1))
             .ToArray();
+
+        var total = fileList.Length;
+        var current = 0;
         foreach (var file in fileList)
         {
             var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken);
 
             var foo = JsonDocument.Parse(fileValue);
 
-            System.Diagnostics.Debug.Print($"Extracting {file}");
+            System.Diagnostics.Debug.Print($"Extracting {current}/{total} {(float)current / total:P3} {file.Name.Remove(0, file.Name.IndexOf("-", StringComparison.InvariantCulture) + 1)} {file.Name}");
             if (file.Name.StartsWith("race-", StringComparison.InvariantCulture))
             {
                 foreach (var foo2 in foo.RootElement.EnumerateArray())
@@ -66,6 +69,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     }
                 }
             }
+            current++;
         }
     }
 }
