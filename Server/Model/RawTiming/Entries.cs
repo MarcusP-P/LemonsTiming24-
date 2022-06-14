@@ -20,7 +20,7 @@ public class Entry
     [JsonPropertyName("number")]
     public string Number { get; set; } = "";
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public int? Id { get; set; }
     [JsonPropertyName("team")]
     public string Team { get; set; } = "";
     [JsonPropertyName("tyre")]
@@ -88,7 +88,7 @@ public class Entry
     [JsonPropertyName("driverId")]
     public int DriverId { get; set; }
     [JsonPropertyName("categoryId")]
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
     [JsonPropertyName("state")]
     public string State { get; set; } = "";
     [JsonPropertyName("category")]
