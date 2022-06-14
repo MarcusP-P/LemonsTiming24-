@@ -27,7 +27,7 @@ public class Paramaters
     [JsonPropertyName("trackTemp")]
     public float TrackTemp { get; set; }
     [JsonPropertyName("humidity")]
-    public int Humidity { get; set; }
+    public float Humidity { get; set; }
     [JsonPropertyName("pressure")]
     public float Pressure { get; set; }
     [JsonPropertyName("windSpeed")]
