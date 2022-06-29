@@ -105,10 +105,13 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         System.Diagnostics.Debug.Print($"##### Re Connected");
     }
 
-    private void Client_OnConnected(object? sender, EventArgs e)
+    private async void Client_OnConnected(object? sender, EventArgs e)
     {
         this.clientStartTime = DateTime.Now;
         System.Diagnostics.Debug.Print($"Connected ####### {this.clientStartTime:f}");
+        await this.client!.EmitAsync("stints:join");
+        await this.client!.EmitAsync("laps:join");
+        await this.client!.EmitAsync("race_control:join");
     }
 
     private void Client_OnReconnectAttempt(object? sender, int e)
