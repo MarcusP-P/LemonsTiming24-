@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Shared\LemonsTiming24.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\JsonConverters - Copy\" />
-  </ItemGroup>
-
 </Project>
