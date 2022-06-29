@@ -20,11 +20,12 @@ public class TimingDataFetcherTest : ITimingDataFetcher
     {
         var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.SavedMessagesPath ?? "");
         var fileList = directoryInfo.GetFiles()
-            .Where(x => x.Name.StartsWith("race-", StringComparison.InvariantCulture)
-                || x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
+            .Where(x =>
+                x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("flags-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("laps-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("race-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("stints-", StringComparison.InvariantCulture)
                 )
