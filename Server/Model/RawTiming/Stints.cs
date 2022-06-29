@@ -14,7 +14,6 @@ public class Stints
     public int Participant { get; set; }
 }
 
-
 public class Stint
 {
     [JsonPropertyName("closeLapNumber")]

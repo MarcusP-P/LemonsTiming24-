@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Infrastructure.JsonConverters;
@@ -20,15 +19,9 @@ public class ZeroMeansNullToStringJsonConverter : JsonConverter<string?>
         else if (reader.TokenType == JsonTokenType.Number)
         {
             var nextValue = reader.GetUInt16();
-            if (nextValue==0)
-            {
-                return null;
-            }
-            else
-            {
-                throw new JsonException("Ubnexpoected numeric value");
-            }
+            return nextValue == 0 ? null : throw new JsonException("Ubnexpected numeric value");
         }
+
         throw new NotImplementedException();
     }
 

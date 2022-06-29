@@ -81,6 +81,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     }
                 }
             }
+
             current++;
         }
     }
