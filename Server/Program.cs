@@ -1,7 +1,9 @@
 ﻿using LemonsTiming24.Server.Infrastructure;
 using LemonsTiming24.Server.Services.BackgroundProcessing;
 
+#pragma warning disable CA1852 // Seal internal types
 var builder = WebApplication.CreateBuilder(args);
+#pragma warning restore CA1852 // Seal internal types
 
 // Add services to the container.
 
