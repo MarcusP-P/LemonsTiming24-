@@ -23,7 +23,8 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             .Where(x => x.Name.StartsWith("race-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
-                || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture))
+                || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("stints-", StringComparison.InvariantCulture))
             .OrderBy(x => x.Name.Remove(0, x.Name.IndexOf("-", StringComparison.InvariantCulture) + 1))
             .ToArray();
 
@@ -54,6 +55,17 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText());
+                    }
+                }
+            }
+
+            else if (file.Name.StartsWith("stints-", StringComparison.InvariantCulture))
+            {
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
+                {
+                    if (foo2.ValueKind == JsonValueKind.Array)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<Stints[]>(foo2.GetRawText());
                     }
                 }
             }
