@@ -22,6 +22,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
         var fileList = directoryInfo.GetFiles()
             .Where(x => x.Name.StartsWith("race-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("flags-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("laps-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture)
@@ -79,6 +80,17 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Laps[]>(foo2.GetRawText());
+                    }
+                }
+            }
+
+            else if (file.Name.StartsWith("flags-", StringComparison.InvariantCulture))
+            {
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
+                {
+                    if (foo2.ValueKind == JsonValueKind.Array)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<Flags[]>(foo2.GetRawText());
                     }
                 }
             }
