@@ -33,7 +33,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             .ToArray();
 
         var total = fileList.Length;
-        var current = 0;
+        var current = 1;
         foreach (var file in fileList)
         {
             var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken);
