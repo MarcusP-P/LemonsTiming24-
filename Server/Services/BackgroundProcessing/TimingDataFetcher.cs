@@ -115,7 +115,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     {
         var now = DateTime.Now;
         System.Diagnostics.Debug.Print($"##### Disconnect after {now - this.clientStartTime:c} with reason: {e}");
-        this.LogEvent("Disconnect", eventStart: this.clientStartTime, eventEnd: now);
+        this.LogEvent("Disconnect", reason: e, eventStart: this.clientStartTime, eventEnd: now);
     }
 
     private void Client_OnError(object? sender, string e)
