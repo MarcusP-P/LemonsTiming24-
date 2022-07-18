@@ -118,6 +118,14 @@ public class Entry
     [JsonPropertyName("categoryPositionChangeTime")]
     public long CategoryPositionChangeTime { get; set; }
 
+    // No longer used?
+    [JsonPropertyName("lastLapDiff")]
+    public string LastLapDiff { get; set; } = "";
+    [JsonPropertyName("position")]
+    public string Position { get; set; } = "";
+    [JsonPropertyName("isWEC")]
+    public string IsWec { get; set; } = "";
+
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }

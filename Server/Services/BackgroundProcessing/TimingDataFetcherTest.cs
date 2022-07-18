@@ -178,7 +178,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
 
                             var foo5 = foo3.Where(x => x?.IndividualStints != null)
                                 .SelectMany(x => x.IndividualStints?.Values!)
-                                .Where(x => x.ExtensionData != null)
+                                .Where(x => x?.ExtensionData != null)
                                 .ToList();
                             if (foo5.Count != 0)
                             {
