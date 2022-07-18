@@ -1,4 +1,5 @@
 ﻿
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
@@ -8,16 +9,19 @@ public class Race
     [JsonPropertyName("params")]
     public Paramaters? Paramaters { get; set; }
     [JsonPropertyName("progressFlagState")]
-    public Progressflagstate[]? ProgressFlagState { get; set; }
+    public ProgressFlagState[]? ProgressFlagState { get; set; }
     [JsonPropertyName("entries")]
     public Entry[]? Entries { get; set; }
     [JsonPropertyName("bestSectors")]
-    public Bestsector[]? BestSectors { get; set; }
+    public BestSector[]? BestSectors { get; set; }
     [JsonPropertyName("bestTimesByCategory")]
-    public object[]? BestTimesByCategory { get; set; }
+    public BestTimesByCategory[]? BestTimesByCategory { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
-public class Progressflagstate
+public class ProgressFlagState
 {
     [JsonPropertyName("percentProgress")]
     public float? PercentProgress { get; set; }
@@ -27,9 +31,12 @@ public class Progressflagstate
     public bool Current { get; set; }
     [JsonPropertyName("state")]
     public string State { get; set; } = "";
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
-public class Bestsector
+public class BestTimesByCategory
 {
 
     [JsonExtensionData]

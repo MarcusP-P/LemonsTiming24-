@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
@@ -48,4 +49,7 @@ public class Paramaters
     public int? StoppedSinceTime { get; set; }
     [JsonPropertyName("replay")]
     public bool Replay { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }

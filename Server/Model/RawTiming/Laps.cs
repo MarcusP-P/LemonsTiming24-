@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
@@ -8,6 +9,9 @@ public class Laps
     public Dictionary<string, Lap>? CarLaps { get; set; }
     [JsonPropertyName("participant")]
     public int Participant { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
 public class Lap
@@ -22,6 +26,10 @@ public class Lap
     public int LapNum { get; set; }
     [JsonPropertyName("loopSectors")]
     public Dictionary<string, LoopSector>? LoopSectors { get; set; }
+    [JsonPropertyName("pitOut")]
+    public PitEvent? PitOut { get; set; }
+    [JsonPropertyName("pitIn")]
+    public PitEvent? PitIn { get; set; }
     [JsonPropertyName("position")]
     public int Position { get; set; }
     [JsonPropertyName("sections")]
@@ -38,6 +46,9 @@ public class Lap
     public string TransponderCode { get; set; } = "";
     [JsonPropertyName("transponderIndex")]
     public int TransponderIndex { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
 public class LoopSector
@@ -48,6 +59,9 @@ public class LoopSector
     public int Number { get; set; }
     [JsonPropertyName("time")]
     public int Time { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
 public class Section
@@ -62,6 +76,20 @@ public class Section
     public float Speed { get; set; }
     [JsonPropertyName("time")]
     public int Time { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+}
+
+public class PitEvent
+{
+    [JsonPropertyName("driver")]
+    public int Driver { get; set; }
+    [JsonPropertyName("time")]
+    public long Time { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
 public class Sector
@@ -74,5 +102,8 @@ public class Sector
     public int Number { get; set; }
     [JsonPropertyName("time")]
     public int Time { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 

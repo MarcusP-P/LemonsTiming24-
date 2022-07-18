@@ -19,6 +19,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
     public async Task DoWork(CancellationToken cancellationToken)
     {
         var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.SavedMessagesPath ?? "");
+
         var fileList = directoryInfo.GetFiles()
             .Where(x =>
                 x.Name.StartsWith("best_sectors-", StringComparison.InvariantCulture)
@@ -49,6 +50,69 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Object)
                     {
                         var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText());
+                        if (foo3?.ExtensionData != null)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+
+                        if (foo3?.Paramaters?.ExtensionData != null)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+
+                        if (foo3?.ProgressFlagState != null)
+                        {
+                            var foo4 = foo3.ProgressFlagState
+                                .Where(x => x?.ExtensionData != null)
+                                .ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
+
+                        if (foo3?.Entries != null)
+                        {
+                            var foo4 = foo3.Entries.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo5 = foo3.Entries.Where(x => x?.Drivers != null)
+                                .SelectMany(x => x.Drivers!)
+                                .Where(x => x.ExtensionData != null)
+                                .ToList();
+                            if (foo5.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
+
+                        if (foo3?.BestSectors != null)
+                        {
+                            var foo4 = foo3.BestSectors
+                                .Where(x => x?.ExtensionData != null)
+                                .ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
+
+                        if (foo3?.BestTimesByCategory != null)
+                        {
+                            var foo4 = foo3.BestTimesByCategory
+                                .Where(x => x?.ExtensionData != null)
+                                .ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
+                    }
+                }
+            }
 
             else if (file.Name.StartsWith("best_sectors-", StringComparison.InvariantCulture))
             {
@@ -57,6 +121,14 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<BestSector[]>(foo2.GetRawText());
+                        if (foo3?.Any() ?? false)
+                        {
+                            var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
                     }
                 }
             }
@@ -68,6 +140,23 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText());
+                        if (foo3?.Any() ?? false)
+                        {
+                            var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo5 = foo3.Where(x => x?.Drivers != null)
+                                .SelectMany(x => x.Drivers!)
+                                .Where(x => x.ExtensionData != null)
+                                .ToList();
+                            if (foo5.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
                     }
                 }
             }
@@ -79,6 +168,23 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Stints[]>(foo2.GetRawText());
+                        if (foo3?.Any() ?? false)
+                        {
+                            var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo5 = foo3.Where(x => x?.IndividualStints != null)
+                                .SelectMany(x => x.IndividualStints?.Values!)
+                                .Where(x => x.ExtensionData != null)
+                                .ToList();
+                            if (foo5.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
                     }
                 }
             }
@@ -90,6 +196,66 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Laps[]>(foo2.GetRawText());
+                        if (foo3?.Any() ?? false)
+                        {
+                            var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo5 = foo3.Where(x => x?.CarLaps != null)
+                                .SelectMany(x => x.CarLaps!.Values);
+
+                            var foo6 = foo5.Where(x => x.ExtensionData != null);
+                            if (foo6.Any())
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo7 = foo5.Where(x => x.LoopSectors != null)
+                                .SelectMany(x => x.LoopSectors!.Values)
+                                .Where(x => x?.ExtensionData != null)
+                                .ToList();
+                            if (foo7.Any())
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo8 = foo5
+                                .Where(x => x.PitOut?.ExtensionData != null)
+                                .ToList();
+                            if (foo8.Any())
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo9 = foo5
+                                .Where(x => x.PitIn?.ExtensionData != null)
+                                .ToList();
+                            if (foo9.Any())
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo10 = foo5.Where(x => x.Sections != null)
+                                .SelectMany(x => x.Sections!.Values)
+                                .Where(x => x?.ExtensionData != null)
+                                .ToList();
+                            if (foo10.Any())
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+
+                            var foo11 = foo5.Where(x => x.Sectors != null)
+                                .SelectMany(x => x.Sectors!.Values)
+                                .Where(x => x?.ExtensionData != null)
+                                .ToList();
+                            if (foo11.Any())
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
                     }
                 }
             }
@@ -101,6 +267,14 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<Flags[]>(foo2.GetRawText());
+                        if (foo3?.Any() ?? false)
+                        {
+                            var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+                        }
                     }
                 }
             }
@@ -110,9 +284,13 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             {
                 foreach (var foo2 in foo.RootElement.EnumerateArray())
                 {
-                    if (foo2.ValueKind == JsonValueKind.Array)
+                    if (foo2.ValueKind == JsonValueKind.Object)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Paramaters[]>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Paramaters>(foo2.GetRawText());
+                        if (foo3?.ExtensionData != null)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
                     }
                 }
             }

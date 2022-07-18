@@ -1,4 +1,5 @@
 ﻿
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
@@ -15,4 +16,7 @@ public class BestSector
     public int Number { get; set; }
     [JsonPropertyName("timeStr")]
     public string TimeStr { get; set; } = "";
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
@@ -12,6 +13,9 @@ public class Stints
     public int DriveTime { get; set; }
     [JsonPropertyName("participant")]
     public int Participant { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, object>? ExtensionData { get; set; }
 }
 
 public class Stint
@@ -32,5 +36,7 @@ public class Stint
     public string Type { get; set; } = "";
     [JsonPropertyName("duration")]
     public int Duration { get; set; }
-}
 
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+}

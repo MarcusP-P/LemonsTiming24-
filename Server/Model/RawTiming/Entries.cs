@@ -1,4 +1,5 @@
 ﻿using LemonsTiming24.Server.Infrastructure.JsonConverters;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
@@ -116,6 +117,9 @@ public class Entry
     public long PositionChangeTime { get; set; }
     [JsonPropertyName("categoryPositionChangeTime")]
     public long CategoryPositionChangeTime { get; set; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
 
 public class Driver
@@ -140,4 +144,7 @@ public class Driver
     public int Number { get; set; }
     [JsonPropertyName("shortName")]
     public string ShortName { get; set; } = "";
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }
