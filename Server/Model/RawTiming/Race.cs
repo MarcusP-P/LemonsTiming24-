@@ -31,14 +31,7 @@ public class Progressflagstate
 
 public class Bestsector
 {
-    [JsonPropertyName("driver")]
-    public int Driver { get; set; }
-    [JsonPropertyName("participant")]
-    public string Participant { get; set; } = "";
-    [JsonPropertyName("time")]
-    public int Time { get; set; }
-    [JsonPropertyName("number")]
-    public int Number { get; set; }
-    [JsonPropertyName("timeStr")]
-    public string TimeStr { get; set; } = "";
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }

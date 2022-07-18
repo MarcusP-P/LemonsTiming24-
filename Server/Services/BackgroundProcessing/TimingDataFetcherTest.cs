@@ -21,7 +21,8 @@ public class TimingDataFetcherTest : ITimingDataFetcher
         var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.SavedMessagesPath ?? "");
         var fileList = directoryInfo.GetFiles()
             .Where(x =>
-                x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
+                x.Name.StartsWith("best_sectors-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("entries-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("flags-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("laps-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
@@ -48,6 +49,14 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Object)
                     {
                         var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText());
+
+            else if (file.Name.StartsWith("best_sectors-", StringComparison.InvariantCulture))
+            {
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
+                {
+                    if (foo2.ValueKind == JsonValueKind.Array)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<BestSector[]>(foo2.GetRawText());
                     }
                 }
             }
