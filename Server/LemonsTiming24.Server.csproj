@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0-preview.6.22330.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0-preview.6.22330.3" />
     <PackageReference Include="SocketIOClient" Version="3.0.6" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
