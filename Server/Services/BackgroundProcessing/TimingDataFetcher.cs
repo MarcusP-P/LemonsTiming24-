@@ -66,12 +66,14 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
             {
                 await Task.Delay(15000, cancellationToken);
 
+                /*
                 if (DateTime.Now - this.clientStartTime > TimeSpan.FromMinutes(5))
                 {
                     System.Diagnostics.Debug.Print($"Forced Reconnect after {DateTime.Now - this.clientStartTime:c}");
                     await this.client.DisconnectAsync();
                     await this.client.ConnectAsync();
                 }
+                */
             }
         }
         catch (Exception ex)
