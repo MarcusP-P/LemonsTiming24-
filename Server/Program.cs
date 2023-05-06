@@ -1,4 +1,5 @@
 ﻿using LemonsTiming24.Server.Infrastructure;
+using LemonsTiming24.Server.Infrastructure.SocketIO;
 using LemonsTiming24.Server.Services.BackgroundProcessing;
 
 #pragma warning disable CA1852 // Seal internal types
@@ -16,8 +17,16 @@ builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "LemonsTi
 builder.Services.Configure<TimingConfiguration>(builder.Configuration.GetSection("Timing"));
 
 builder.Services.AddHostedService<TimingDataFetcherHostedService>();
-//builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
-builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcherTest>();
+builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
+//builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcherTest>();
+
+builder.Services.AddScoped<HttpClientRequestTrace>();
+builder.Services.AddScoped<DebuggingHttpClient>();
+
+builder.Logging.ClearProviders().AddConsole();
+
+builder.Services.AddHttpClient("SocektIO")
+    .AddHttpMessageHandler<HttpClientRequestTrace>();
 
 var app = builder.Build();
 

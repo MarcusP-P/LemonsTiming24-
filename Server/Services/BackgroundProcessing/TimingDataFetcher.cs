@@ -2,6 +2,7 @@
 using LemonsTiming24.Server.Infrastructure;
 using SocketIOClient;
 using System.Text.Json;
+using LemonsTiming24.Server.Infrastructure.SocketIO;
 
 namespace LemonsTiming24.Server.Services.BackgroundProcessing;
 public class TimingDataFetcher : ITimingDataFetcher, IDisposable
@@ -9,14 +10,20 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     private readonly IOptions<TimingConfiguration> timingConfiguration;
     private SocketIO? client;
     private bool disposedValue;
+    private readonly ILogger<TimingDataFetcher> logger;
+    private readonly DebuggingHttpClient debuggingHttpClient;
 
     private DateTime clientStartTime;
 
-    public TimingDataFetcher(IOptions<TimingConfiguration> timingConfiguration)
+    public TimingDataFetcher(IOptions<TimingConfiguration> timingConfiguration,
+        ILogger<TimingDataFetcher> logger,
+        DebuggingHttpClient debuggingHttpClient)
     {
         ArgumentNullException.ThrowIfNull(timingConfiguration, nameof(timingConfiguration));
 
         this.timingConfiguration = timingConfiguration;
+        this.logger = logger;
+        this.debuggingHttpClient = debuggingHttpClient;
     }
 
     public class ConnectionStatus
@@ -35,8 +42,13 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
             this.client = new SocketIO(this.timingConfiguration.Value.BaseUrl, new SocketIOOptions
             {
                 AutoUpgrade = false,
-                EIO = 3,
-            });
+                EIO = EngineIO.V3,
+                Transport = SocketIOClient.Transport.TransportProtocol.Polling,
+                Reconnection = true,
+            })
+            {
+                HttpClient = this.debuggingHttpClient
+            };
 
             this.client.OnAny(async (eventName, response) =>
                 await this.WriteJsonDocument(eventName, response.ToString()));
