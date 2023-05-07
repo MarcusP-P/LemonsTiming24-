@@ -63,19 +63,24 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
             this.clientStartTime = DateTime.Now;
             await this.client.ConnectAsync();
 
+            await Task.Delay(-1, cancellationToken);
+
+            /*
+            // If we need to do something regularly, use this instead of the above block
             while (!cancellationToken.IsCancellationRequested)
             {
+
                 await Task.Delay(15000, cancellationToken);
 
-                /*
                 if (DateTime.Now - this.clientStartTime > TimeSpan.FromMinutes(5))
                 {
                     System.Diagnostics.Debug.Print($"Forced Reconnect after {DateTime.Now - this.clientStartTime:c}");
                     await this.client.DisconnectAsync();
                     await this.client.ConnectAsync();
                 }
-                */
+                
             }
+            */
         }
         catch (Exception ex)
         {
