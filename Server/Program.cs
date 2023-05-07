@@ -23,8 +23,6 @@ builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
 builder.Services.AddScoped<HttpClientRequestTrace>();
 builder.Services.AddScoped<DebuggingHttpClient>();
 
-builder.Logging.ClearProviders().AddConsole();
-
 builder.Services.AddHttpClient("SocektIO")
     .AddHttpMessageHandler<HttpClientRequestTrace>();
 
