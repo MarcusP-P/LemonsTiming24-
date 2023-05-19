@@ -1,6 +1,6 @@
 ﻿namespace LemonsTiming24.Server.Infrastructure.SocketIO;
 
-internal class HttpClientRequestTrace : DelegatingHandler
+internal sealed partial class HttpClientRequestTrace : DelegatingHandler
 {
     private readonly ILogger<HttpClientRequestTrace> logger;
 
@@ -11,42 +11,60 @@ internal class HttpClientRequestTrace : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var logPayloads = true;
+        HttpResponseMessage response;
+        this.LogRequest(request.ToString());
+        if (request.Content != null)
+        {
+            this.LogRequestBody(await request.Content.ReadAsStringAsync(cancellationToken));
+        }
 
-        HttpResponseMessage? response = null;
         try
         {
             response = await base.SendAsync(request, cancellationToken);
 
-        }
-        catch (Exception)
-        {
-            // We want to log HttpClient request/response when some exception occurs, so we can reproduce what caused it.
-            logPayloads = true;
-            throw;
-        }
-        finally
-        {
-            // Finally, we check if we decided to log HttpClient request/response or not.
-            // Only if we want to, we will have some allocations for the logger and try to read headers and contents.
-            if (logPayloads)
+            this.LogResult(response.ToString());
+            if (response.Content != null)
             {
-                if (this.logger is not null)
-                {
-                    this.logger.LogInformation("Request Headers\n{Request}", request);
-                    if (request?.Content != null)
-                    {
-                        this.logger.LogInformation("Request Body\n{Request}",                         await request.Content.ReadAsStringAsync(cancellationToken));
-                    }
-                    this.logger.LogInformation("Response Headers\n{Response}", response);
-                    if (response?.Content != null)
-                    {
-                        this.logger.LogInformation("Response Body\n{Request}", await response.Content.ReadAsStringAsync(cancellationToken));
-                    }
-                }
+                this.LogResultBody(await response.Content.ReadAsStringAsync(cancellationToken));
             }
+        }
+        catch (Exception ex)
+        {
+            this.LogException(ex);
+            throw;
         }
 
         return response;
     }
+
+    // Log merssages
+    [LoggerMessage(
+        EventId = 1,
+        Level = LogLevel.Debug,
+        Message = "Request Headers:\n{Request}")]
+    public partial void LogRequest(string request);
+
+    [LoggerMessage(
+        EventId = 2,
+        Level = LogLevel.Debug,
+        Message = "Request Body:\n{RequestBody}")]
+    public partial void LogRequestBody(string requestBody);
+
+    [LoggerMessage(
+        EventId = 3,
+        Level = LogLevel.Debug,
+        Message = "Response Headers:\n{Response}")]
+    public partial void LogResult(string response);
+
+    [LoggerMessage(
+        EventId = 4,
+        Level = LogLevel.Debug,
+        Message = "Response Body:\n{ResponseBody}")]
+    public partial void LogResultBody(string responseBody);
+
+    [LoggerMessage(
+        EventId = 5,
+        Level = LogLevel.Warning,
+        Message = "Exception while returning")]
+    public partial void LogException(Exception ex);
 }
