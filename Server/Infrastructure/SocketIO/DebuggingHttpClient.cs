@@ -15,8 +15,8 @@ public class DebuggingHttpClient : IHttpClient
 
     private static readonly HashSet<string> allowedHeaders = new()
     {
-            "user-agent",
-        };
+        "user-agent",
+    };
 
     public void AddHeader(string name, string value)
     {
