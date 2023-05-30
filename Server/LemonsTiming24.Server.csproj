@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>e7dbd818-6780-4dad-93e1-a1d616348bba</UserSecretsId>
   </PropertyGroup>
 
@@ -11,8 +12,8 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'swagger' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0-preview.4.23260.4" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-preview.4.23260.4" />
     <PackageReference Include="SocketIOClient" Version="3.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
@@ -21,5 +22,6 @@
     <ProjectReference Include="..\Client\LemonsTiming24.Client.csproj" />
     <ProjectReference Include="..\Shared\LemonsTiming24.Shared.csproj" />
   </ItemGroup>
+
 
 </Project>

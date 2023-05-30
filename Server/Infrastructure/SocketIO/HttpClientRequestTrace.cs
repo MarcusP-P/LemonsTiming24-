@@ -37,7 +37,8 @@ internal sealed partial class HttpClientRequestTrace : DelegatingHandler
         return response;
     }
 
-    // Log merssages
+#pragma warning disable IDE0060 // Remove unused parameter
+    // Log messages
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Debug,
@@ -67,4 +68,5 @@ internal sealed partial class HttpClientRequestTrace : DelegatingHandler
         Level = LogLevel.Warning,
         Message = "Exception while returning")]
     public partial void LogException(Exception ex);
+#pragma warning restore IDE0060 // Remove unused parameter
 }

@@ -24,7 +24,7 @@ public class WebSocketController : ControllerBase
         return new WebSocketUrl { Url = $"ws{(request.IsHttps ? "s" : "")}://{request.Host}{websocketEndpoint}" };
     }
 
-    [HttpGet(websocketEndpoint)]
+    [Route(websocketEndpoint)]
     public async Task GetWebsocket()
     {
         if (this.HttpContext.WebSockets.IsWebSocketRequest)
