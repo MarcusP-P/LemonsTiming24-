@@ -17,6 +17,8 @@ public class BestSector
     [JsonPropertyName("timeStr")]
     public string TimeStr { get; set; } = "";
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }

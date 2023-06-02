@@ -50,6 +50,8 @@ public class Paramaters
     [JsonPropertyName("replay")]
     public bool Replay { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }

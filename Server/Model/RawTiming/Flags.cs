@@ -14,6 +14,8 @@ public class Flags
     [JsonPropertyName("state")]
     public string State { get; set; } = "";
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }

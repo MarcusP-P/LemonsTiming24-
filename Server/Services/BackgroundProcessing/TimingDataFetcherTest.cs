@@ -50,7 +50,9 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Object)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling= System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow});
+                        var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
+
+#if JSON_MISSING_PROPERTIES_BREAK
                         if (foo3?.ExtensionData != null)
                         {
                             System.Diagnostics.Debugger.Break();
@@ -60,9 +62,10 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         {
                             System.Diagnostics.Debugger.Break();
                         }
-
+#endif
                         if (foo3?.ProgressFlagState != null)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.ProgressFlagState
                                 .Where(x => x?.ExtensionData != null)
                                 .ToList();
@@ -70,10 +73,12 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
 
                         if (foo3?.Entries != null)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.Entries.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
@@ -88,10 +93,12 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
 
                         if (foo3?.BestSectors != null)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.BestSectors
                                 .Where(x => x?.ExtensionData != null)
                                 .ToList();
@@ -99,10 +106,12 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
 
                         if (foo3?.BestTimesByCategory != null)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.BestTimesByCategory
                                 .Where(x => x?.ExtensionData != null)
                                 .ToList();
@@ -110,6 +119,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
                     }
                 }
@@ -124,11 +134,13 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         var foo3 = JsonSerializer.Deserialize<BestSector[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
                     }
                 }
@@ -143,6 +155,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
@@ -157,6 +170,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
                     }
                 }
@@ -171,6 +185,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         var foo3 = JsonSerializer.Deserialize<Stints[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
@@ -185,6 +200,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
                     }
                 }
@@ -199,7 +215,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         var foo3 = JsonSerializer.Deserialize<Laps[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
-                            /*
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
@@ -256,6 +272,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
                     }
                 }
@@ -270,11 +287,13 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         var foo3 = JsonSerializer.Deserialize<Flags[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
+#if JSON_MISSING_PROPERTIES_BREAK
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
+#endif
                         }
                     }
                 }
@@ -288,10 +307,12 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Object)
                     {
                         var foo3 = JsonSerializer.Deserialize<Paramaters>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
+#if JSON_MISSING_PROPERTIES_BREAK
                         if (foo3?.ExtensionData != null)
                         {
                             System.Diagnostics.Debugger.Break();
                         }
+#endif
                     }
                 }
             }
@@ -302,12 +323,27 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
                         var foo3 = JsonSerializer.Deserialize<RaceControl[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
+                        if (foo3?.Any() ?? false)
+                        {
+#if JSON_MISSING_PROPERTIES_BREAK
+                            var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
+                            if (foo4.Count != 0)
+                            {
+                                System.Diagnostics.Debugger.Break();
+                            }
+#endif
+                        }
                     }
                 }
             }
             else
             {
+#if JSON_MISSING_PROPERTIES_BREAK
+                System.Diagnostics.Debugger.Break();
+#elif JSON_MISSING_PROPERTIES_EXCEPTION
                 throw new Exception($"Unknown file type for {file.Name}");
+
+#endif
             }
 
             current++;

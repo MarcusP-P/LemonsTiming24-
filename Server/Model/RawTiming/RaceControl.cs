@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
@@ -33,4 +34,9 @@ public class RaceControl
 
     [JsonPropertyName("localTime")]
     public string LocalTime { get; set; } = "";
+
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }

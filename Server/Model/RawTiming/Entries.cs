@@ -130,8 +130,10 @@ public class Entry
     [JsonPropertyName("isWEC")]
     public string IsWec { get; set; } = "";
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class Driver
@@ -161,6 +163,8 @@ public class Driver
     [JsonPropertyName("*Extra 5")]
     public string Extra5 { get; set; } = "";
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }

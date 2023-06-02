@@ -10,8 +10,10 @@ public class Laps
     [JsonPropertyName("participant")]
     public int Participant { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class Lap
@@ -47,8 +49,10 @@ public class Lap
     [JsonPropertyName("transponderIndex")]
     public int TransponderIndex { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class LoopSector
@@ -60,8 +64,10 @@ public class LoopSector
     [JsonPropertyName("time")]
     public int Time { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class Section
@@ -77,8 +83,10 @@ public class Section
     [JsonPropertyName("time")]
     public int Time { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class PitEvent
@@ -88,8 +96,10 @@ public class PitEvent
     [JsonPropertyName("time")]
     public long Time { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class Sector
@@ -103,7 +113,9 @@ public class Sector
     [JsonPropertyName("time")]
     public int Time { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 

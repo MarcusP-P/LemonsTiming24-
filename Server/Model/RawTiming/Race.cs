@@ -17,8 +17,10 @@ public class Race
     [JsonPropertyName("bestTimesByCategory")]
     public BestTimesByCategory[]? BestTimesByCategory { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class ProgressFlagState
@@ -32,13 +34,17 @@ public class ProgressFlagState
     [JsonPropertyName("state")]
     public string State { get; set; } = "";
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
 
 public class BestTimesByCategory
 {
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }

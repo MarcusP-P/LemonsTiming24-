@@ -14,8 +14,10 @@ public class Stints
     [JsonPropertyName("participant")]
     public int Participant { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, object>? ExtensionData { get; set; }
+#endif
 }
 
 public class Stint
@@ -37,6 +39,8 @@ public class Stint
     [JsonPropertyName("duration")]
     public int Duration { get; set; }
 
+#if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+#endif
 }
