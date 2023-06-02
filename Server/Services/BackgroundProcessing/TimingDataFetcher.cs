@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Options;
-using LemonsTiming24.Server.Infrastructure;
+﻿using LemonsTiming24.Server.Infrastructure;
+using LemonsTiming24.Server.Infrastructure.SocketIO;
+using Microsoft.Extensions.Options;
 using SocketIOClient;
 using System.Text.Json;
-using LemonsTiming24.Server.Infrastructure.SocketIO;
 
 namespace LemonsTiming24.Server.Services.BackgroundProcessing;
 public class TimingDataFetcher : ITimingDataFetcher, IDisposable

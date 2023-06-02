@@ -1,6 +1,6 @@
+using LemonsTiming24.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using LemonsTiming24.Client;
 
 #pragma warning disable CA1852 // Seal internal types
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
