@@ -23,7 +23,7 @@ builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
 builder.Services.AddScoped<HttpClientRequestTrace>();
 builder.Services.AddScoped<DebuggingHttpClient>();
 
-builder.Services.AddHttpClient("SocektIO")
+builder.Services.AddHttpClient("SocketIO")
     .AddHttpMessageHandler<HttpClientRequestTrace>();
 
 var app = builder.Build();

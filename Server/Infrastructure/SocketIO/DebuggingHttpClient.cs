@@ -8,7 +8,7 @@ public class DebuggingHttpClient : IHttpClient
 {
     public DebuggingHttpClient(IHttpClientFactory clientFactory)
     {
-        this.httpClient = clientFactory.CreateClient("SocektIO");
+        this.httpClient = clientFactory.CreateClient("SocketIO");
     }
 
     private readonly HttpClient httpClient;
