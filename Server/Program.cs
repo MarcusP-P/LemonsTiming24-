@@ -1,6 +1,6 @@
 ﻿using LemonsTiming24.Server.Infrastructure;
 using LemonsTiming24.Server.Infrastructure.SocketIO;
-using LemonsTiming24.Server.Model.Database.Context;
+using LemonsTiming24.Server.Model.Database.Contexts;
 using LemonsTiming24.Server.Services.BackgroundProcessing;
 using Microsoft.EntityFrameworkCore;
 

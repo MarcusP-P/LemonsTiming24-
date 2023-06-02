@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
-namespace LemonsTiming24.Server.Model.Database.Context;
+namespace LemonsTiming24.Server.Model.Database.Contexts;
 
 public class TimingRawContext : DbContext
 {
