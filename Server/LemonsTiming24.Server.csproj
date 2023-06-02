@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>e7dbd818-6780-4dad-93e1-a1d616348bba</UserSecretsId>
+	<AnalysisMode>all</AnalysisMode>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />

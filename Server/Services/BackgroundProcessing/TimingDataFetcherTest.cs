@@ -41,7 +41,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             var current = 1;
             foreach (var file in fileList)
             {
-                var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken);
+                var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken).ConfigureAwait(false);
 
                 var foo = JsonDocument.Parse(fileValue);
 
@@ -225,7 +225,8 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                 }
 
                                 var foo5 = foo3.Where(x => x?.CarLaps != null)
-                                    .SelectMany(x => x.CarLaps!.Values);
+                                    .SelectMany(x => x.CarLaps!.Values)
+                                    .ToArray();
 
                                 var foo6 = foo5.Where(x => x.ExtensionData != null);
                                 if (foo6.Any())
