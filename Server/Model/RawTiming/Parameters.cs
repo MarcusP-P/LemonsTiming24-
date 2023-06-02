@@ -49,6 +49,8 @@ public class Parameters
     public int? StoppedSinceTime { get; set; }
     [JsonPropertyName("replay")]
     public bool Replay { get; set; }
+    [JsonPropertyName("weather")]
+    public string? Weather { get; set; }
 
 #if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
