@@ -5,4 +5,5 @@ public class TimingConfiguration
     public string? BaseUrl { get; set; }
     public string? SocketPath { get; set; }
     public string? ArchiveMessagesPath { get; set; }
+    public string[]? ArchivedMessagesPaths { get; set; }
 }
