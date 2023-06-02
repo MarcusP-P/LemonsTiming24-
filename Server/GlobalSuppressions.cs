@@ -7,3 +7,4 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Generated file", Scope = "member", Target = "~F:LemonsTiming24.Server.Controllers.WeatherForecastController.logger")]
 [assembly: SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Generated file", Scope = "member", Target = "~F:LemonsTiming24.Server.Pages.ErrorModel.logger")]
+[assembly: SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "The logger will be useful", Scope = "member", Target = "~F:LemonsTiming24.Server.Services.BackgroundProcessing.TimingDataFetcher.logger")]
