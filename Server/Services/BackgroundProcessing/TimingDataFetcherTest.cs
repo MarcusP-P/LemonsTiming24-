@@ -134,7 +134,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         if (foo2.ValueKind == JsonValueKind.Array)
                         {
                             var foo3 = JsonSerializer.Deserialize<BestSector[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
-                            if (foo3?.Any() ?? false)
+                            if (foo3 is not null && foo3.Length != 0)
                             {
 #if JSON_MISSING_PROPERTIES_BREAK
                                 var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -155,7 +155,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         if (foo2.ValueKind == JsonValueKind.Array)
                         {
                             var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
-                            if (foo3?.Any() ?? false)
+                            if (foo3 is not null && foo3.Length != 0)
                             {
 #if JSON_MISSING_PROPERTIES_BREAK
                                 var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -185,7 +185,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         if (foo2.ValueKind == JsonValueKind.Array)
                         {
                             var foo3 = JsonSerializer.Deserialize<Stints[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
-                            if (foo3?.Any() ?? false)
+                            if (foo3 is not null && foo3.Length != 0)
                             {
 #if JSON_MISSING_PROPERTIES_BREAK
                                 var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -215,7 +215,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         if (foo2.ValueKind == JsonValueKind.Array)
                         {
                             var foo3 = JsonSerializer.Deserialize<Laps[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
-                            if (foo3?.Any() ?? false)
+                            if (foo3 is not null && foo3.Length != 0)
                             {
 #if JSON_MISSING_PROPERTIES_BREAK
                                 var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -237,7 +237,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                     .SelectMany(x => x.LoopSectors!.Values)
                                     .Where(x => x?.ExtensionData != null)
                                     .ToList();
-                                if (foo7.Any())
+                                if (foo7.Count != 0)
                                 {
                                     System.Diagnostics.Debugger.Break();
                                 }
@@ -245,7 +245,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                 var foo8 = foo5
                                     .Where(x => x.PitOut?.ExtensionData != null)
                                     .ToList();
-                                if (foo8.Any())
+                                if (foo8.Count != 0)
                                 {
                                     System.Diagnostics.Debugger.Break();
                                 }
@@ -253,7 +253,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                 var foo9 = foo5
                                     .Where(x => x.PitIn?.ExtensionData != null)
                                     .ToList();
-                                if (foo9.Any())
+                                if (foo9.Count != 0)
                                 {
                                     System.Diagnostics.Debugger.Break();
                                 }
@@ -262,7 +262,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                     .SelectMany(x => x.Sections!.Values)
                                     .Where(x => x?.ExtensionData != null)
                                     .ToList();
-                                if (foo10.Any())
+                                if (foo10.Count != 0)
                                 {
                                     System.Diagnostics.Debugger.Break();
                                 }
@@ -271,7 +271,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                     .SelectMany(x => x.Sectors!.Values)
                                     .Where(x => x?.ExtensionData != null)
                                     .ToList();
-                                if (foo11.Any())
+                                if (foo11.Count != 0)
                                 {
                                     System.Diagnostics.Debugger.Break();
                                 }
@@ -288,7 +288,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         if (foo2.ValueKind == JsonValueKind.Array)
                         {
                             var foo3 = JsonSerializer.Deserialize<Flags[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
-                            if (foo3?.Any() ?? false)
+                            if (foo3 is not null && foo3.Length != 0)
                             {
 #if JSON_MISSING_PROPERTIES_BREAK
                                 var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -326,7 +326,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                         if (foo2.ValueKind == JsonValueKind.Array)
                         {
                             var foo3 = JsonSerializer.Deserialize<RaceControl[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
-                            if (foo3?.Any() ?? false)
+                            if (foo3 is not null && foo3.Length != 0)
                             {
 #if JSON_MISSING_PROPERTIES_BREAK
                                 var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
