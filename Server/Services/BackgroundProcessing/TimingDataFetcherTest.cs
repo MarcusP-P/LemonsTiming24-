@@ -28,6 +28,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 || x.Name.StartsWith("laps-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("params-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("race-", StringComparison.InvariantCulture)
+                || x.Name.StartsWith("race_control-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("race_light-", StringComparison.InvariantCulture)
                 || x.Name.StartsWith("stints-", StringComparison.InvariantCulture)
                 )
@@ -49,7 +50,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Object)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Race>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling= System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow});
                         if (foo3?.ExtensionData != null)
                         {
                             System.Diagnostics.Debugger.Break();
@@ -120,7 +121,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
-                        var foo3 = JsonSerializer.Deserialize<BestSector[]>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<BestSector[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -139,7 +140,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Entry[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -167,7 +168,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Stints[]>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Stints[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -195,9 +196,10 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Laps[]>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Laps[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
+                            /*
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
                             if (foo4.Count != 0)
                             {
@@ -221,7 +223,6 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
-
                             var foo8 = foo5
                                 .Where(x => x.PitOut?.ExtensionData != null)
                                 .ToList();
@@ -266,7 +267,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Array)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Flags[]>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Flags[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.Any() ?? false)
                         {
                             var foo4 = foo3.Where(x => x?.ExtensionData != null).ToList();
@@ -286,13 +287,27 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                 {
                     if (foo2.ValueKind == JsonValueKind.Object)
                     {
-                        var foo3 = JsonSerializer.Deserialize<Paramaters>(foo2.GetRawText());
+                        var foo3 = JsonSerializer.Deserialize<Paramaters>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
                         if (foo3?.ExtensionData != null)
                         {
                             System.Diagnostics.Debugger.Break();
                         }
                     }
                 }
+            }
+            else if (file.Name.StartsWith("race_control-", StringComparison.InvariantCulture))
+            {
+                foreach (var foo2 in foo.RootElement.EnumerateArray())
+                {
+                    if (foo2.ValueKind == JsonValueKind.Array)
+                    {
+                        var foo3 = JsonSerializer.Deserialize<RaceControl[]>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception($"Unknown file type for {file.Name}");
             }
 
             current++;

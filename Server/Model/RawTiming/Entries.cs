@@ -48,10 +48,14 @@ public class Entry
     public int LastlapTime { get; set; }
     [JsonPropertyName("bestlapTime")]
     public int BestlapTime { get; set; }
+    [JsonPropertyName("secondBestlapTime")]
+    public int SecondBestlapTime { get; set; }
     [JsonPropertyName("pitstop")]
     public int Pitstop { get; set; }
     [JsonPropertyName("bestLap")]
     public string BestLap { get; set; } = "";
+    [JsonPropertyName("secondBestLap")]
+    public string SecondBestLap { get; set; } = "";
     [JsonPropertyName("speed")]
     public string Speed { get; set; } = "";
     [JsonPropertyName("bestTimeSector1")]
@@ -152,6 +156,10 @@ public class Driver
     public int Number { get; set; }
     [JsonPropertyName("shortName")]
     public string ShortName { get; set; } = "";
+    [JsonPropertyName("*Extra 4")]
+    public string Extra4 { get; set; } = "";
+    [JsonPropertyName("*Extra 5")]
+    public string Extra5 { get; set; } = "";
 
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? ExtensionData { get; set; }
