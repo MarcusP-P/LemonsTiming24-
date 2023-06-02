@@ -113,7 +113,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
 
         var fileName = $"{name}-{handleTime:o}.{extension}".Replace(":", "-");
 
-        var path = Path.Join(this.timingConfiguration.Value.SavedMessagesPath, fileName);
+        var path = Path.Join(this.timingConfiguration.Value.ArchiveMessagesPath, fileName);
 
         await File.WriteAllTextAsync(path, document);
     }

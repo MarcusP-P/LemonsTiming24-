@@ -18,7 +18,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
 
     public async Task DoWork(CancellationToken cancellationToken)
     {
-        var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.SavedMessagesPath ?? "");
+        var directoryInfo = new DirectoryInfo(this.timingConfiguration.Value?.ArchiveMessagesPath ?? "");
 
         var fileList = directoryInfo.GetFiles()
             .Where(x =>
