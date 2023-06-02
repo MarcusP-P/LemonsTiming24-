@@ -1,6 +1,8 @@
 ﻿using LemonsTiming24.Server.Infrastructure;
 using LemonsTiming24.Server.Infrastructure.SocketIO;
+using LemonsTiming24.Server.Model.Database.Context;
 using LemonsTiming24.Server.Services.BackgroundProcessing;
+using Microsoft.EntityFrameworkCore;
 
 #pragma warning disable CA1852 // Seal internal types
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,10 @@ builder.Services.AddScoped<ITimingDataFetcher, TimingDataFetcher>();
 builder.Services.AddScoped<HttpClientRequestTrace>();
 builder.Services.AddScoped<DebuggingHttpClient>();
 
+builder.Services.AddDbContext<TimingRawContext>(
+    options =>
+        _ = options.UseSqlServer(builder.Configuration.GetConnectionString("TimingRawContext")));
+
 builder.Services.AddHttpClient("SocketIO")
     .AddHttpMessageHandler<HttpClientRequestTrace>();
 
@@ -42,6 +48,15 @@ else
     _ = app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     _ = app.UseHsts();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<TimingRawContext>();
+    _ = context.Database.EnsureCreated();
+    // DbInitializer.Initialize(context);
 }
 
 app.UseHttpsRedirection();
