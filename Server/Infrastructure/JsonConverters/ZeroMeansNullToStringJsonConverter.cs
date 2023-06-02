@@ -19,7 +19,7 @@ public class ZeroMeansNullToStringJsonConverter : JsonConverter<string?>
         else if (reader.TokenType == JsonTokenType.Number)
         {
             var nextValue = reader.GetUInt16();
-            return nextValue == 0 ? null : throw new JsonException("Ubnexpected numeric value");
+            return nextValue == 0 ? null : throw new JsonException("Unexpected numeric value");
         }
 
         throw new NotImplementedException();

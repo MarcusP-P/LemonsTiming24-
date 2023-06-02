@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace LemonsTiming24.Server.Model.RawTiming;
 
-public class Paramaters
+public class Parameters
 {
     [JsonPropertyName("remaining")]
     public float Remaining { get; set; }

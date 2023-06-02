@@ -7,7 +7,7 @@ namespace LemonsTiming24.Server.Model.RawTiming;
 public class Race
 {
     [JsonPropertyName("params")]
-    public Paramaters? Paramaters { get; set; }
+    public Parameters? Parameters { get; set; }
     [JsonPropertyName("progressFlagState")]
     public ProgressFlagState[]? ProgressFlagState { get; set; }
     [JsonPropertyName("entries")]

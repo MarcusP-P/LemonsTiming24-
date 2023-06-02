@@ -8,7 +8,7 @@ namespace LemonsTiming24.Server.Controllers;
 [ApiController]
 public class WebSocketController : ControllerBase
 {
-    private const string websocketEndpoint = "/ws";
+    private const string webSocketEndpoint = "/ws";
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Will probably use later.")]
     private readonly ILogger<WebSocketController> logger;
 
@@ -21,11 +21,11 @@ public class WebSocketController : ControllerBase
     public WebSocketUrl Get()
     {
         var request = this.HttpContext.Request;
-        return new WebSocketUrl { Url = $"ws{(request.IsHttps ? "s" : "")}://{request.Host}{websocketEndpoint}" };
+        return new WebSocketUrl { Url = $"ws{(request.IsHttps ? "s" : "")}://{request.Host}{webSocketEndpoint}" };
     }
 
-    [Route(websocketEndpoint)]
-    public async Task GetWebsocket()
+    [Route(webSocketEndpoint)]
+    public async Task GetWebSocket()
     {
         if (this.HttpContext.WebSockets.IsWebSocketRequest)
         {

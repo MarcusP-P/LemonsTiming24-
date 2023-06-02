@@ -27,7 +27,7 @@ public class Stint
     [JsonPropertyName("driver")]
     public int Driver { get; set; }
     [JsonPropertyName("driverAccumTime")]
-    public int DriverAccumTime { get; set; }
+    public int DriverAccumulatedTime { get; set; }
     [JsonPropertyName("finishTime")]
     public long FinishTime { get; set; }
     [JsonPropertyName("openLapNumber")]

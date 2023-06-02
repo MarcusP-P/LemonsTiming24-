@@ -43,13 +43,13 @@ public class Entry
     [JsonPropertyName("classGapPrev")]
     public string ClassGapPrev { get; set; } = "";
     [JsonPropertyName("lastlap")]
-    public string Lastlap { get; set; } = "";
+    public string LastLap { get; set; } = "";
     [JsonPropertyName("lastlapTime")]
-    public int LastlapTime { get; set; }
+    public int LastLapTime { get; set; }
     [JsonPropertyName("bestlapTime")]
-    public int BestlapTime { get; set; }
+    public int BestLapTime { get; set; }
     [JsonPropertyName("secondBestlapTime")]
-    public int SecondBestlapTime { get; set; }
+    public int SecondBestLapTime { get; set; }
     [JsonPropertyName("pitstop")]
     public int Pitstop { get; set; }
     [JsonPropertyName("bestLap")]

@@ -60,7 +60,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                 System.Diagnostics.Debugger.Break();
                             }
 
-                            if (foo3?.Paramaters?.ExtensionData != null)
+                            if (foo3?.Parameters?.ExtensionData != null)
                             {
                                 System.Diagnostics.Debugger.Break();
                             }
@@ -309,7 +309,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     {
                         if (foo2.ValueKind == JsonValueKind.Object)
                         {
-                            var foo3 = JsonSerializer.Deserialize<Paramaters>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
+                            var foo3 = JsonSerializer.Deserialize<Parameters>(foo2.GetRawText(), new JsonSerializerOptions { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow });
 #if JSON_MISSING_PROPERTIES_BREAK
                             if (foo3?.ExtensionData != null)
                             {
