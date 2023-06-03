@@ -11,11 +11,17 @@ Once the Blazor WASM templates have been updated, you can update the API compone
 
 ## Dealing with UTF8 BOM and inconsistent line endings
 
+### Fixing the problem once it's happened
+
 Some of the .Net generated template files have a pesky UTF* BOM at the start of the file, and git sometimes strips CRLF. To fix these on Windows execute the following two commands (Reverse the order on unix):
 
 *  ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec dos2unix {} \;``
 
 *  ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec unix2dos {} \;``
+
+### Prevent VS 2022 from creating BOM markers
+
+You cna prevent VS2022 from creating the BOM by installing the [Force UTF-8 (No BOM) 2022](https://marketplace.visualstudio.com/items?itemName=qazwsxlty.forceutf8nobom2022) Visual Studio extension.
 
 ## Configuring for development
 
