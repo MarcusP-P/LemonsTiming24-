@@ -1,4 +1,4 @@
-﻿namespace LemonsTiming24.Server.Services.BackgroundProcessing;
+namespace LemonsTiming24.Server.Services.BackgroundProcessing;
 public class TimingDataFetcherHostedService : BackgroundService
 {
     private readonly IServiceProvider serviceProvider;

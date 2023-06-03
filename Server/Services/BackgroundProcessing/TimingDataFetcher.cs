@@ -1,4 +1,4 @@
-﻿using LemonsTiming24.Server.Infrastructure;
+using LemonsTiming24.Server.Infrastructure;
 using LemonsTiming24.Server.Infrastructure.SocketIO;
 using Microsoft.Extensions.Options;
 using SocketIOClient;

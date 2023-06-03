@@ -1,4 +1,4 @@
-﻿using SocketIOClient.Transport.Http;
+using SocketIOClient.Transport.Http;
 using System.Net;
 using System.Reflection;
 

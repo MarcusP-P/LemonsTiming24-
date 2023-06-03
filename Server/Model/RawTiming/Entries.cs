@@ -1,4 +1,4 @@
-﻿using LemonsTiming24.Server.Infrastructure.JsonConverters;
+using LemonsTiming24.Server.Infrastructure.JsonConverters;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

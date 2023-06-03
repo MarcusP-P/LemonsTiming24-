@@ -1,4 +1,4 @@
-﻿using LemonsTiming24.SharedCode;
+using LemonsTiming24.SharedCode;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.WebSockets;

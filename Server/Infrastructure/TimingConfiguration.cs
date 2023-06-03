@@ -1,4 +1,4 @@
-﻿
+
 namespace LemonsTiming24.Server.Infrastructure;
 public class TimingConfiguration
 {

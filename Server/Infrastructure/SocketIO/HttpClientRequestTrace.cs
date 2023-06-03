@@ -1,4 +1,4 @@
-﻿namespace LemonsTiming24.Server.Infrastructure.SocketIO;
+namespace LemonsTiming24.Server.Infrastructure.SocketIO;
 
 internal sealed partial class HttpClientRequestTrace : DelegatingHandler
 {
