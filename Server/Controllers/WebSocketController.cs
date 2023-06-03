@@ -21,9 +21,18 @@ public class WebSocketController : ControllerBase
     public WebSocketUrl Get()
     {
         var request = this.HttpContext.Request;
-        return new WebSocketUrl { Url = $"ws{(request.IsHttps ? "s" : "")}://{request.Host}{webSocketEndpoint}" };
+        var webSocketUriBuilder = new UriBuilder
+        {
+            Scheme = $"ws{(request.IsHttps ? "s" : "")}",
+            Host = request.Host.Host,
+            Port = request.Host.Port ?? (request.IsHttps ? 433 : 80),
+            Path = webSocketEndpoint,
+        };
+
+        return new WebSocketUrl { Url = webSocketUriBuilder.Uri };
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route(webSocketEndpoint)]
     public async Task GetWebSocket()
     {
