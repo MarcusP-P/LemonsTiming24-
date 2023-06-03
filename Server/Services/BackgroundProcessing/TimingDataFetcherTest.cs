@@ -43,7 +43,7 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             {
                 var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken).ConfigureAwait(false);
 
-                var foo = JsonDocument.Parse(fileValue);
+                using var foo = JsonDocument.Parse(fileValue);
 
                 System.Diagnostics.Debug.Print($"Extracting from {testPath}: {current}/{total} {(float)current / total:P3} {file.Name.Remove(0, file.Name.IndexOf("-", StringComparison.InvariantCulture) + 1)} {file.Name}");
                 if (file.Name.StartsWith("race-", StringComparison.InvariantCulture))
