@@ -1,4 +1,4 @@
-﻿namespace LemonsTiming24.Server.Infrastructure.SocketIO;
+namespace LemonsTiming24.Server.Infrastructure.SocketIO;
 
 internal sealed partial class HttpClientRequestTrace : DelegatingHandler
 {
@@ -11,21 +11,23 @@ internal sealed partial class HttpClientRequestTrace : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
         HttpResponseMessage response;
         this.LogRequest(request.ToString());
         if (request.Content != null)
         {
-            this.LogRequestBody(await request.Content.ReadAsStringAsync(cancellationToken));
+            this.LogRequestBody(await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
         }
 
         try
         {
-            response = await base.SendAsync(request, cancellationToken);
+            response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
             this.LogResult(response.ToString());
             if (response.Content != null)
             {
-                this.LogResultBody(await response.Content.ReadAsStringAsync(cancellationToken));
+                this.LogResultBody(await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
             }
         }
         catch (Exception ex)

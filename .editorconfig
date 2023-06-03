@@ -1,6 +1,12 @@
 # Remove the line below if you want to inherit .editorconfig settings from higher directories
 root = true
 
+[*.{csproj,sln}]
+# Indentation and spacing
+indent_size = 2
+indent_style = space
+tab_width = 2
+
 [*.{cs,vb}]
 
 #### Core EditorConfig Options ####
@@ -47,7 +53,7 @@ dotnet_style_explicit_tuple_names = true:warning
 dotnet_style_namespace_match_folder = true:warning
 dotnet_style_null_propagation = true:warning
 dotnet_style_object_initializer = true:warning
-dotnet_style_operator_placement_when_wrapping = beginning_of_line:warning
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
 dotnet_style_prefer_auto_properties = true:warning
 dotnet_style_prefer_compound_assignment = true:warning
 dotnet_style_prefer_conditional_expression_over_assignment = true:warning
@@ -135,24 +141,6 @@ dotnet_naming_style.camel_case.required_suffix =
 dotnet_naming_style.camel_case.word_separator = 
 dotnet_naming_style.camel_case.capitalization = camel_case
 
-# Analysers
-
-dotnet_diagnostic.RemoveUnnecessaryImportsFixable.severity=warning
-dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning
-dotnet_analyzer_diagnostic.category-Compiler.severity = warning
-dotnet_analyzer_diagnostic.category-Design.severity = warning
-dotnet_analyzer_diagnostic.category-Documentation.severity = warning
-dotnet_analyzer_diagnostic.category-Encapsulation.severity = warning
-dotnet_analyzer_diagnostic.category-Globalization.severity = warning
-dotnet_analyzer_diagnostic.category-Interoperability.severity = warning
-dotnet_analyzer_diagnostic.category-Maintainability.severity = warning
-dotnet_analyzer_diagnostic.category-Naming.severity = warning
-dotnet_analyzer_diagnostic.category-Performance.severity = warning
-dotnet_analyzer_diagnostic.category-Publish.severity = warning
-dotnet_analyzer_diagnostic.category-Reliability.severity = warning
-dotnet_analyzer_diagnostic.category-Security.severity = warning
-dotnet_analyzer_diagnostic.category-Style.severity = warning
-dotnet_analyzer_diagnostic.category-Usage.severity = warning
 
 # C# files
 [*.cs]
@@ -243,23 +231,23 @@ csharp_space_after_semicolon_in_for_statement = true
 csharp_space_around_binary_operators = before_and_after
 csharp_space_around_declaration_statements = false
 csharp_space_before_colon_in_inheritance_clause = true
-csharp_space_before_comma = false
-csharp_space_before_dot = false
-csharp_space_before_open_square_brackets = false
-csharp_space_before_semicolon_in_for_statement = false
-csharp_space_between_empty_square_brackets = false
-csharp_space_between_method_call_empty_parameter_list_parentheses = false
-csharp_space_between_method_call_name_and_opening_parenthesis = false
-csharp_space_between_method_call_parameter_list_parentheses = false
-csharp_space_between_method_declaration_empty_parameter_list_parentheses = false
-csharp_space_between_method_declaration_name_and_open_parenthesis = false
-csharp_space_between_method_declaration_parameter_list_parentheses = false
-csharp_space_between_parentheses = false
-csharp_space_between_square_brackets = false
+csharp_space_before_comma = false:warning
+csharp_space_before_dot = false:warning
+csharp_space_before_open_square_brackets = false:warning
+csharp_space_before_semicolon_in_for_statement = false:warning
+csharp_space_between_empty_square_brackets = false:warning
+csharp_space_between_method_call_empty_parameter_list_parentheses = false:warning
+csharp_space_between_method_call_name_and_opening_parenthesis = false:warning
+csharp_space_between_method_call_parameter_list_parentheses = false:warning
+csharp_space_between_method_declaration_empty_parameter_list_parentheses = false:warning
+csharp_space_between_method_declaration_name_and_open_parenthesis = false:warning
+csharp_space_between_method_declaration_parameter_list_parentheses = false:warning
+csharp_space_between_parentheses = false:warning
+csharp_space_between_square_brackets = false:warning
 
 # Wrapping preferences
-csharp_preserve_single_line_blocks = true
-csharp_preserve_single_line_statements = false
+csharp_preserve_single_line_blocks = true:warning
+csharp_preserve_single_line_statements = false:warning
 
 csharp_style_prefer_method_group_conversion = true:warning
 csharp_style_prefer_top_level_statements = true:warning
@@ -267,3 +255,25 @@ csharp_style_prefer_local_over_anonymous_function = true:warning
 csharp_style_prefer_tuple_swap = true:warning
 csharp_style_prefer_parameter_null_checking = true:warning
 csharp_style_prefer_extended_property_pattern = true:warning
+csharp_style_prefer_utf8_string_literals = true:warning
+csharp_style_prefer_readonly_struct = true:warning
+csharp_style_prefer_readonly_struct_member = true:warning
+csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = false:warning
+csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = false:warning
+
+[*.{cs,vb}]
+
+# Analysers
+
+dotnet_analyzer_diagnostic.severity = warning
+
+dotnet_analyzer_diagnostic.category-Interoperability.severity = error
+dotnet_analyzer_diagnostic.category-SingleFile.severity = error
+dotnet_analyzer_diagnostic.category-Security.severity = error
+dotnet_analyzer_diagnostic.category-AOT.severity = error
+dotnet_analyzer_diagnostic.category-ComInterfaceGenerator.severity = error
+dotnet_analyzer_diagnostic.category-Trimming.severity = error
+
+# Code Quality
+dotnet_code_quality.api_surface = all
+dotnet_code_quality.required_modifiers = none

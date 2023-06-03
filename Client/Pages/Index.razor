@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @using LemonsTiming24.SharedCode
 @using System.Net.WebSockets
 @using System.Text
@@ -39,7 +39,7 @@ else
 		webSocketEndpoint = await Http.GetFromJsonAsync<WebSocketUrl>("api/v1/WebSocket");
 		if (webSocketEndpoint is not null)
 		{
-			await webSocket.ConnectAsync(new Uri(webSocketEndpoint.Url), disposalTokenSource.Token);
+			await webSocket.ConnectAsync(webSocketEndpoint.Url, disposalTokenSource.Token);
 			_ = ReceiveLoop();
 		}
 

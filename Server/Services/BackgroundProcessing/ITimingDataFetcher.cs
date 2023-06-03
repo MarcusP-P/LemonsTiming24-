@@ -1,4 +1,4 @@
-﻿
+
 namespace LemonsTiming24.Server.Services.BackgroundProcessing;
 public interface ITimingDataFetcher
 {

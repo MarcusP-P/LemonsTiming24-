@@ -1,4 +1,4 @@
-﻿using LemonsTiming24.SharedCode;
+using LemonsTiming24.SharedCode;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.WebSockets;
@@ -21,17 +21,25 @@ public class WebSocketController : ControllerBase
     public WebSocketUrl Get()
     {
         var request = this.HttpContext.Request;
-        return new WebSocketUrl { Url = $"ws{(request.IsHttps ? "s" : "")}://{request.Host}{webSocketEndpoint}" };
+        var webSocketUriBuilder = new UriBuilder
+        {
+            Scheme = $"ws{(request.IsHttps ? "s" : "")}",
+            Host = request.Host.Host,
+            Port = request.Host.Port ?? (request.IsHttps ? 433 : 80),
+            Path = webSocketEndpoint,
+        };
+
+        return new WebSocketUrl { Url = webSocketUriBuilder.Uri };
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route(webSocketEndpoint)]
     public async Task GetWebSocket()
     {
         if (this.HttpContext.WebSockets.IsWebSocketRequest)
         {
-            using var webSocket = await
-                               this.HttpContext.WebSockets.AcceptWebSocketAsync();
-            await Echo(webSocket);
+            using var webSocket = await this.HttpContext.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
+            await Echo(webSocket).ConfigureAwait(false);
         }
         else
         {
@@ -41,16 +49,19 @@ public class WebSocketController : ControllerBase
 
     private static async Task Echo(WebSocket webSocket)
     {
+        _ = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
+
         var buffer = new byte[1024 * 4];
-        var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+        var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None)
+            .ConfigureAwait(false);
         while (!result.CloseStatus.HasValue)
         {
-            await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+            await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None).ConfigureAwait(false);
 
-            result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None).ConfigureAwait(false);
 
         }
 
-        await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+        await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None).ConfigureAwait(false);
     }
 }

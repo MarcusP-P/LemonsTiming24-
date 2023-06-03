@@ -1,4 +1,4 @@
-﻿using SocketIOClient.Transport.Http;
+using SocketIOClient.Transport.Http;
 using System.Net;
 using System.Reflection;
 
@@ -8,6 +8,8 @@ public class DebuggingHttpClient : IHttpClient
 {
     public DebuggingHttpClient(IHttpClientFactory clientFactory)
     {
+        _ = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
+
         this.httpClient = clientFactory.CreateClient("SocketIO");
     }
 
@@ -20,6 +22,8 @@ public class DebuggingHttpClient : IHttpClient
 
     public void AddHeader(string name, string value)
     {
+        _ = name ?? throw new ArgumentNullException(nameof(name));
+
         if (this.httpClient.DefaultRequestHeaders.Contains(name))
         {
             _ = this.httpClient.DefaultRequestHeaders.Remove(name);
@@ -51,11 +55,14 @@ public class DebuggingHttpClient : IHttpClient
         return this.httpClient.SendAsync(request, cancellationToken);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1054:URI-like parameters should not be strings", Justification = "Implementation of an interface that uses a string.")]
     public Task<HttpResponseMessage> PostAsync(string requestUri,
         HttpContent content,
         CancellationToken cancellationToken)
     {
-        return this.httpClient.PostAsync(requestUri, content, cancellationToken);
+        _ = requestUri ?? throw new ArgumentNullException(nameof(requestUri));
+
+        return this.httpClient.PostAsync(new Uri(requestUri), content, cancellationToken);
     }
 
     public Task<string> GetStringAsync(Uri requestUri)

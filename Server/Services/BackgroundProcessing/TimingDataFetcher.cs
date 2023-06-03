@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Options;
 using LemonsTiming24.Server.Infrastructure;
+using LemonsTiming24.Server.Infrastructure.SocketIO;
+using Microsoft.Extensions.Options;
 using SocketIOClient;
 using System.Text.Json;
-using LemonsTiming24.Server.Infrastructure.SocketIO;
 
 namespace LemonsTiming24.Server.Services.BackgroundProcessing;
 public class TimingDataFetcher : ITimingDataFetcher, IDisposable
@@ -26,7 +26,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         this.debuggingHttpClient = debuggingHttpClient;
     }
 
-    public class ConnectionStatus
+    private sealed class ConnectionStatus
     {
         public string EventName { get; set; } = "";
         public string? Reason { get; set; }
@@ -52,18 +52,18 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
             };
 
             this.client.OnAny(async (eventName, response) =>
-                await this.WriteJsonDocument(eventName, response.ToString()));
+                await this.WriteJsonDocument(eventName, response.ToString()).ConfigureAwait(false));
 
-            this.client.OnConnected += this.Client_OnConnected;
-            this.client.OnReconnected += this.Client_OnReconnected;
-            this.client.OnError += this.Client_OnError;
-            this.client.OnDisconnected += this.Client_OnDisconnected;
-            this.client.OnReconnectAttempt += this.Client_OnReconnectAttempt;
+            this.client.OnConnected += this.ClientOnConnected;
+            this.client.OnReconnected += this.ClientOnReconnected;
+            this.client.OnError += this.ClientOnError;
+            this.client.OnDisconnected += this.ClientOnDisconnected;
+            this.client.OnReconnectAttempt += this.ClientOnReconnectAttempt;
 
             this.clientStartTime = DateTime.Now;
-            await this.client.ConnectAsync();
+            await this.client.ConnectAsync().ConfigureAwait(false);
 
-            await Task.Delay(-1, cancellationToken);
+            await Task.Delay(-1, cancellationToken).ConfigureAwait(false);
 
             /*
             // If we need to do something regularly, use this instead of the above block
@@ -85,13 +85,19 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         catch (Exception ex)
         {
             System.Diagnostics.Debug.Print($"Exception: {ex.Message}");
+            throw;
         }
     }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Quick and dirty detect if it's a json file")]
     private async Task WriteJsonDocument(string name, string document)
     {
+        _ = name ?? throw new ArgumentNullException(nameof(name));
+
         name = string.Join("", name.Split(Path.GetInvalidFileNameChars()));
         var extension = "txt";
         var handleTime = DateTime.UtcNow;
+        // TODO: Tidy this up, and try to clean up CA1031
         try
         {
             var jsonDocument = JsonDocument.Parse(document);
@@ -115,7 +121,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
 
         var path = Path.Join(this.timingConfiguration.Value.ArchiveMessagesPath, fileName);
 
-        await File.WriteAllTextAsync(path, document);
+        await File.WriteAllTextAsync(path, document).ConfigureAwait(false);
     }
 
     private void LogEvent(string eventName, string? reason = null, string? connectionId = null, int? attemptNumber = null, DateTime? eventStart = null, DateTime? eventEnd = null)
@@ -132,36 +138,36 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         _ = this.WriteJsonDocument("aaaInternalDiagnosticsEvent", document);
     }
 
-    private void Client_OnDisconnected(object? sender, string e)
+    private void ClientOnDisconnected(object? sender, string e)
     {
         var now = DateTime.Now;
         System.Diagnostics.Debug.Print($"##### Disconnect after {now - this.clientStartTime:c} with reason: {e}");
         this.LogEvent("Disconnect", connectionId: this.client!.Id, reason: e, eventStart: this.clientStartTime, eventEnd: now);
     }
 
-    private void Client_OnError(object? sender, string e)
+    private void ClientOnError(object? sender, string e)
     {
         System.Diagnostics.Debug.Print($"##### Error: {e}");
         this.LogEvent("Error", connectionId: this.client!.Id, reason: e);
     }
 
-    private void Client_OnReconnected(object? sender, int e)
+    private void ClientOnReconnected(object? sender, int e)
     {
         System.Diagnostics.Debug.Print($"##### Re Connected");
         this.LogEvent("Reconnected", connectionId: this.client!.Id, attemptNumber: e);
     }
 
-    private async void Client_OnConnected(object? sender, EventArgs e)
+    private async void ClientOnConnected(object? sender, EventArgs e)
     {
         this.clientStartTime = DateTime.Now;
         System.Diagnostics.Debug.Print($"Connected ####### {this.clientStartTime:f}");
         this.LogEvent("Connected", connectionId: this.client!.Id);
-        await this.client!.EmitAsync("stints:join");
-        await this.client!.EmitAsync("laps:join");
-        await this.client!.EmitAsync("race_control:join");
+        await this.client!.EmitAsync("stints:join").ConfigureAwait(false);
+        await this.client!.EmitAsync("laps:join").ConfigureAwait(false);
+        await this.client!.EmitAsync("race_control:join").ConfigureAwait(false);
     }
 
-    private void Client_OnReconnectAttempt(object? sender, int e)
+    private void ClientOnReconnectAttempt(object? sender, int e)
     {
         System.Diagnostics.Debug.Print($"###### Reconnect Attempt number {e} {DateTime.Now:f} #######");
         this.LogEvent("Reconnection attempt", connectionId: this.client!.Id, attemptNumber: e);

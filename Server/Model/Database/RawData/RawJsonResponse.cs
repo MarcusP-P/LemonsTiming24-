@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace LemonsTiming24.Server.Model.Database.RawData;
 

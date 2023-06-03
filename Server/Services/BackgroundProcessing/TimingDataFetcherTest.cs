@@ -1,4 +1,4 @@
-﻿
+
 using LemonsTiming24.Server.Infrastructure;
 using LemonsTiming24.Server.Model.RawTiming;
 using Microsoft.Extensions.Options;
@@ -41,9 +41,9 @@ public class TimingDataFetcherTest : ITimingDataFetcher
             var current = 1;
             foreach (var file in fileList)
             {
-                var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken);
+                var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken).ConfigureAwait(false);
 
-                var foo = JsonDocument.Parse(fileValue);
+                using var foo = JsonDocument.Parse(fileValue);
 
                 System.Diagnostics.Debug.Print($"Extracting from {testPath}: {current}/{total} {(float)current / total:P3} {file.Name.Remove(0, file.Name.IndexOf("-", StringComparison.InvariantCulture) + 1)} {file.Name}");
                 if (file.Name.StartsWith("race-", StringComparison.InvariantCulture))
@@ -225,7 +225,8 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                                 }
 
                                 var foo5 = foo3.Where(x => x?.CarLaps != null)
-                                    .SelectMany(x => x.CarLaps!.Values);
+                                    .SelectMany(x => x.CarLaps!.Values)
+                                    .ToArray();
 
                                 var foo6 = foo5.Where(x => x.ExtensionData != null);
                                 if (foo6.Any())

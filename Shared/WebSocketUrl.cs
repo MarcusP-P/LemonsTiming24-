@@ -1,5 +1,5 @@
-﻿namespace LemonsTiming24.SharedCode;
+namespace LemonsTiming24.SharedCode;
 public class WebSocketUrl
 {
-    public string Url { get; set; } = "";
+    public Uri Url { get; set; } = null!;
 }

@@ -1,4 +1,4 @@
-﻿using LemonsTiming24.Server.Model.Database.RawData;
+using LemonsTiming24.Server.Model.Database.RawData;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 

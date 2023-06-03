@@ -1,4 +1,4 @@
-﻿namespace LemonsTiming24.Server.Model.Database.RawData;
+namespace LemonsTiming24.Server.Model.Database.RawData;
 
 public class Session
 {
