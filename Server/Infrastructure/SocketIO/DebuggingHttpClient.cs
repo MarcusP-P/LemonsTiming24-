@@ -17,7 +17,7 @@ public class DebuggingHttpClient : IHttpClient
 
     private static readonly HashSet<string> allowedHeaders = new()
     {
-        "user-agent",
+        "user-agent".ToUpperInvariant(),
     };
 
     public void AddHeader(string name, string value)
@@ -29,7 +29,7 @@ public class DebuggingHttpClient : IHttpClient
             _ = this.httpClient.DefaultRequestHeaders.Remove(name);
         }
 
-        if (allowedHeaders.Contains(name.ToLowerInvariant()))
+        if (allowedHeaders.Contains(name.ToUpperInvariant()))
         {
             _ = this.httpClient.DefaultRequestHeaders.TryAddWithoutValidation(name, value);
         }

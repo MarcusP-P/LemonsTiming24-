@@ -1,6 +1,6 @@
 namespace LemonsTiming24.Server.Model.Database.RawData;
 
-public class Session
+public class RawTimingSession
 {
     public required Guid Id { get; set; }
     public required string Name { get; set; }

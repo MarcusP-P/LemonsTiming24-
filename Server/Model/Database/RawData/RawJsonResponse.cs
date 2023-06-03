@@ -12,7 +12,7 @@ public class RawJsonResponse : IDisposable
 
     public required JsonDocument DataValue { get; set; }
 
-    public required Session Session { get; set; }
+    public required RawTimingSession Session { get; set; }
 
     protected virtual void Dispose(bool disposing)
     {

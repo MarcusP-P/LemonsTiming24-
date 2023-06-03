@@ -11,12 +11,14 @@ public class TimingRawContext : DbContext
     {
     }
 
-    public DbSet<Session> Sessions { get; set; } = null!;
+    public DbSet<RawTimingSession> Sessions { get; set; } = null!;
     public DbSet<RawJsonResponse> RawJsonResponses { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        _ = modelBuilder.Entity<Session>();
+        _ = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
+
+        _ = modelBuilder.Entity<RawTimingSession>();
         _ = modelBuilder.Entity<RawJsonResponse>()
             .Property(e => e.DataValue)
             .HasConversion(v => JsonSerializer.Serialize(v, new JsonSerializerOptions { WriteIndented = true }),

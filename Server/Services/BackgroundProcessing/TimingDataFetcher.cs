@@ -117,7 +117,7 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
         {
         }
 
-        var fileName = $"{name}-{handleTime:o}.{extension}".Replace(":", "-");
+        var fileName = $"{name}-{handleTime:o}.{extension}".Replace(":", "-", StringComparison.InvariantCulture);
 
         var path = Path.Join(this.timingConfiguration.Value.ArchiveMessagesPath, fileName);
 
