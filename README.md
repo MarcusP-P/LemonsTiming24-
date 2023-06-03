@@ -11,7 +11,11 @@ Once the Blazor WASM templates have been updated, you can update the API compone
 
 ## Dealing with UTF8 BOM and inconsistent line endings
 
-Some of the .Net generated template files have a pesky UTF* BOM at the start of the file, and git sometimes strips CRLF. To fix these on Windows, use ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec unix2dos {} \;``. This will strip out the BOM and fix the line endings.
+Some of the .Net generated template files have a pesky UTF* BOM at the start of the file, and git sometimes strips CRLF. To fix these on Windows execute the following two commands (Reverse the order on unix):
+
+*  ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec dos2unix {} \;``
+
+*  ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec unix2dos {} \;``
 
 ## Configuring for development
 
