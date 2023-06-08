@@ -39,6 +39,11 @@ public class TimingDataFetcher : ITimingDataFetcher, IDisposable
     {
         try
         {
+            // Create the folder if it doesn't exist
+            if (!Directory.Exists(this.timingConfiguration.Value.ArchiveMessagesPath))
+            {
+                _ = Directory.CreateDirectory(this.timingConfiguration.Value.ArchiveMessagesPath ?? "");
+            }
 
             this.client = new SocketIO(this.timingConfiguration.Value.BaseUrl, new SocketIOOptions
             {
