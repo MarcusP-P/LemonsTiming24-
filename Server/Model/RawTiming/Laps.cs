@@ -44,6 +44,8 @@ public class Lap
     public int Time { get; set; }
     [JsonPropertyName("topSpeed")]
     public float TopSpeed { get; set; }
+    [JsonPropertyName("trackLimits")]
+    public bool? TrackLimits { get; set; }
     [JsonPropertyName("transponderCode")]
     public string TransponderCode { get; set; } = "";
     [JsonPropertyName("transponderIndex")]
@@ -111,7 +113,9 @@ public class Sector
     [JsonPropertyName("number")]
     public int Number { get; set; }
     [JsonPropertyName("time")]
-    public int Time { get; set; }
+    public long Time { get; set; }
+    [JsonPropertyName("trackLimits")]
+    public bool? TrackLimits { get; set; }
 
 #if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]

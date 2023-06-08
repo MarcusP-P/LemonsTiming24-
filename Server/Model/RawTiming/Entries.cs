@@ -38,10 +38,26 @@ public class Entry
     public string Gap { get; set; } = "";
     [JsonPropertyName("gapPrev")]
     public string GapPrev { get; set; } = "";
+    [JsonPropertyName("gapTime")]
+    public int GapTime { get; set; }
+    [JsonPropertyName("gapPrevTime")]
+    public int GapPrevTime { get; set; }
+    [JsonPropertyName("gapLaps")]
+    public string GapLaps { get; set; } = "";
+    [JsonPropertyName("gapPrevLaps")]
+    public string GapPrevLaps { get; set; } = "";
     [JsonPropertyName("classGap")]
     public string ClassGap { get; set; } = "";
     [JsonPropertyName("classGapPrev")]
     public string ClassGapPrev { get; set; } = "";
+    [JsonPropertyName("classGapTime")]
+    public int ClassGapTime { get; set; }
+    [JsonPropertyName("classGapPrevTime")]
+    public int ClassGapPrevTime { get; set; }
+    [JsonPropertyName("classGapLaps")]
+    public string ClassGapLaps { get; set; } = "";
+    [JsonPropertyName("classGapPrevLaps")]
+    public string ClassGapPrevLaps { get; set; } = "";
     [JsonPropertyName("lastlap")]
     public string LastLap { get; set; } = "";
     [JsonPropertyName("lastlapTime")]

@@ -8,9 +8,9 @@ public class Stints
     [JsonPropertyName("stints")]
     public Dictionary<string, Stint>? IndividualStints { get; set; }
     [JsonPropertyName("pitTime")]
-    public int PitTime { get; set; }
+    public long PitTime { get; set; }
     [JsonPropertyName("driveTime")]
-    public int DriveTime { get; set; }
+    public long DriveTime { get; set; }
     [JsonPropertyName("participant")]
     public int Participant { get; set; }
 
@@ -37,7 +37,7 @@ public class Stint
     [JsonPropertyName("type")]
     public string Type { get; set; } = "";
     [JsonPropertyName("duration")]
-    public int Duration { get; set; }
+    public long Duration { get; set; }
 
 #if !JSON_MISSING_PROPERTIES_EXCEPTION
     [JsonExtensionData]
