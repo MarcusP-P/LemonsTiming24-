@@ -35,9 +35,9 @@ public class TimingDataFetcherTest : ITimingDataFetcher
                     || x.Name.StartsWith("stints-", StringComparison.InvariantCulture)
                     )
                 .OrderBy(x => x.Name.Remove(0, x.Name.IndexOf("-", StringComparison.InvariantCulture) + 1))
-                .ToArray();
+                .ToList();
 
-            var total = fileList.Length;
+            var total = fileList.Count;
             var current = 1;
             foreach (var file in fileList)
             {
@@ -226,10 +226,10 @@ public class TimingDataFetcherTest : ITimingDataFetcher
 
                                 var foo5 = foo3.Where(x => x?.CarLaps != null)
                                     .SelectMany(x => x.CarLaps!.Values)
-                                    .ToArray();
+                                    .ToList();
 
-                                var foo6 = foo5.Where(x => x.ExtensionData != null);
-                                if (foo6.Any())
+                                var foo6 = foo5.Where(x => x.ExtensionData != null).ToList();
+                                if (foo6.Count != 0)
                                 {
                                     System.Diagnostics.Debugger.Break();
                                 }
