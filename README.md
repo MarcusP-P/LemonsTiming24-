@@ -13,11 +13,9 @@ Once the Blazor WASM templates have been updated, you can update the API compone
 
 ### Fixing the problem once it's happened
 
-Some of the .Net generated template files have a pesky UTF* BOM at the start of the file, and git sometimes strips CRLF. To fix these on Windows execute the following two commands (Reverse the order on unix):
+Some of the .Net generated template files have a pesky UTF* BOM at the start of the file, and git sometimes strips CRLF. To fix these on Windows execute the following command (Reverse the order of the two `exec`s on unix):
 
-*  ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec dos2unix {} \;``
-
-*  ``find . -not -path './.git/*' -not -type d  \( -name '*.bat' -o -name '*.config' -o -name '*.cs' -o -name '*.cshtml' -o -name '*.csproj' -o -name '*.css' -o -name '*.editorconfig' -o -name '*.gitignore' -o -name '*.html' -o -name '*.json' -o -name '*.map' -o -name '*.md' -o -name '*.user' -o -name '*.razor' -o -name '*.sln' -o -name '*.svg' -o -name FONT-LICENSE -o -name ICON-LICENSE -o -name LICENSE \) -exec unix2dos {} \;``
+*  ``find . -not -path './.git/*' -not -path './packages/*' -not -path './artifacts/*' -not -path './.vs/*' -not -type d -not \( -name '*.png' -o -name '*.eot' -o -name '*.otf' -o -name '*.ttf' -o -name '*.woff' \) -exec dos2unix {} \; -exec unix2dos {} \;``
 
 ### Prevent VS 2022 from creating BOM markers
 
