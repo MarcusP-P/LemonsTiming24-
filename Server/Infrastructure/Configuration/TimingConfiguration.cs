@@ -1,11 +1,9 @@
+using System.Text.Json;
 
 namespace LemonsTiming24.Server.Infrastructure.Configuration;
-using System.Text.Json;
 
 public class TimingConfiguration
 {
-    private ICollection<string>? archivedMessagesPaths;
-
     public Uri? BaseUrl { get; set; }
 
     public string? SocketPath { get; set; }
@@ -14,35 +12,43 @@ public class TimingConfiguration
 
     public string? ArchiveListPath { get; set; }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "This is a DTO.")]
+    private ICollection<string>? archivedMessagesPathsInternal;
+
+    //    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "This is a DTO.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "This is a DTO.")]
     public ICollection<string>? ArchivedMessagesPaths
     {
         get
         {
-            if (this.archivedMessagesPaths is null)
+            if (this.archivedMessagesPathsInternal is null)
             {
                 if (this.ArchiveListPath is null)
                 {
                     return null;
                 }
 
-                this.archivedMessagesPaths = new List<string>();
+                this.archivedMessagesPathsInternal = new List<string>();
 
-                using FileStream openStream = File.OpenRead(this.ArchiveListPath);
+                using var openStream = File.OpenRead(this.ArchiveListPath);
 
                 var sourceLocations = JsonSerializer.Deserialize<SourceLocations>(openStream);
 
-                var path=Path.GetDirectoryName(this.ArchiveListPath);
+                if (sourceLocations is null || sourceLocations.Folders is null)
+                {
+                    return this.archivedMessagesPathsInternal;
+                }
+
+                var path = Path.GetDirectoryName(this.ArchiveListPath);
 
                 foreach (var folder in sourceLocations.Folders)
                 {
-                    this.archivedMessagesPaths.Add(Path.Join(path, folder.Path));
+                    this.archivedMessagesPathsInternal.Add(Path.Join(path, folder.Path));
                 }
             }
 
-            return this.archivedMessagesPaths;
+            return this.archivedMessagesPathsInternal;
         }
 
-        set => this.archivedMessagesPaths = value;
+        set => this.archivedMessagesPathsInternal = value;
     }
 }
