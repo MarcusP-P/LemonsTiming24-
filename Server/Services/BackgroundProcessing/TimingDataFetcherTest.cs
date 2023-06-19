@@ -1,5 +1,5 @@
 
-using LemonsTiming24.Server.Infrastructure;
+using LemonsTiming24.Server.Infrastructure.Configuration;
 using LemonsTiming24.Server.Model.RawTiming;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
