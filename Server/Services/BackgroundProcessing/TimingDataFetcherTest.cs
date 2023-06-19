@@ -380,6 +380,9 @@ public partial class TimingDataFetcherTest : ITimingDataFetcher
                     case "clear_entries":
                         break;
 
+                    case "aaaInternalDiagnosticsEvent":
+                        break;
+
                     default:
 #if JSON_MISSING_PROPERTIES_BREAK
                         System.Diagnostics.Debugger.Break();
