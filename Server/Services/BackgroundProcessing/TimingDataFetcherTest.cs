@@ -2,6 +2,7 @@
 using LemonsTiming24.Server.Infrastructure.Configuration;
 using LemonsTiming24.Server.Model.RawTiming;
 using Microsoft.Extensions.Options;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -10,11 +11,8 @@ public partial class TimingDataFetcherTest : ITimingDataFetcher
 {
     private readonly IOptions<TimingConfiguration> timingConfiguration;
 
-    [GeneratedRegex("[a-zA-Z_]+-([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}\\.[0-9]+Z)\\.json", RegexOptions.NonBacktracking | RegexOptions.CultureInvariant)]
+    [GeneratedRegex("(?<dataType>[a-zA-Z_]+)-(?<date>[0-9]{4}-[0-9]{2}-[0-9]{2}T)(?<hour>[0-9]{2})-(?<minute>[0-9]{2})-(?<second>[0-9]{2}\\.[0-9]*)(?<timeZone>Z)\\.json", RegexOptions.CultureInvariant)]
     private static partial Regex matchPatternGeneratedRegex();
-
-    [GeneratedRegex("([a-zA-Z_]+)-[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}\\.[0-9]+Z\\.json", RegexOptions.NonBacktracking | RegexOptions.CultureInvariant)]
-    private static partial Regex dataTypePatternGeneratedRegex();
 
     public TimingDataFetcherTest(IOptions<TimingConfiguration> timingConfiguration)
     {
@@ -29,23 +27,43 @@ public partial class TimingDataFetcherTest : ITimingDataFetcher
         {
             var directoryInfo = new DirectoryInfo(testPath);
 
+            var badFileList = directoryInfo.GetFiles()
+                .Where(x => !matchPatternGeneratedRegex().IsMatch(x.Name))
+                .ToList();
+
+#if JSON_MISSING_PROPERTIES_BREAK
+            if (badFileList.Count != 0)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
+
             var fileList = directoryInfo.GetFiles()
                 .Where(x => matchPatternGeneratedRegex().IsMatch(x.Name))
-                .OrderBy(x => matchPatternGeneratedRegex().Match(x.Name).Groups[1].Value)
+                .Select(x =>
+                {
+                    var match = matchPatternGeneratedRegex().Match(x.Name);
+                    return new
+                    {
+                        FileName = x.Name,
+                        Path = x.FullName,
+                        DataType = match.Groups["dataType"].Value,
+                        DateStamp = DateTime.Parse($"{match.Groups["date"].Value}{match.Groups["hour"].Value}:{match.Groups["minute"].Value}:{match.Groups["second"].Value}{match.Groups["timeZone"].Value}", null, DateTimeStyles.RoundtripKind)
+                    };
+                })
+                .OrderBy(x => x.DateStamp)
                 .ToList();
 
             var total = fileList.Count;
             var current = 1;
             foreach (var file in fileList)
             {
-                var fileValue = await File.ReadAllTextAsync(file.FullName, cancellationToken).ConfigureAwait(false);
+                var fileValue = await File.ReadAllTextAsync(file.Path, cancellationToken).ConfigureAwait(false);
 
                 using var foo = JsonDocument.Parse(fileValue);
 
-                var dataType = dataTypePatternGeneratedRegex().Match(file.FullName).Groups[1].Value;
-
-                System.Diagnostics.Debug.Print($"Type {dataType}: Extracting from {testPath}: {current}/{total} {(float)current / total:P3} {file.Name.Remove(0, file.Name.IndexOf("-", StringComparison.InvariantCulture) + 1)} {file.Name}");
-                switch (dataType)
+                System.Diagnostics.Debug.Print($"Extracting from {testPath}: {current}/{total} {(float)current / total:P3} {file.DateStamp:O} {file.DataType} {file.FileName}");
+                switch (file.DataType)
                 {
                     case "race":
                     {
