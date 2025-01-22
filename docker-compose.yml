@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  lemonstiming24.server:
+    image: ${DOCKER_REGISTRY-}lemonstiming24server
+    build:
+      context: .
+      dockerfile: Server/Dockerfile

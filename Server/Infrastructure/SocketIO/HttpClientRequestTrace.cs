@@ -1,13 +1,8 @@
 namespace LemonsTiming24.Server.Infrastructure.SocketIO;
 
-internal sealed partial class HttpClientRequestTrace : DelegatingHandler
+internal sealed partial class HttpClientRequestTrace(ILogger<HttpClientRequestTrace> logger) : DelegatingHandler
 {
-    private readonly ILogger<HttpClientRequestTrace> logger;
-
-    public HttpClientRequestTrace(ILogger<HttpClientRequestTrace> logger)
-    {
-        this.logger = logger;
-    }
+    private readonly ILogger<HttpClientRequestTrace> logger = logger;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {

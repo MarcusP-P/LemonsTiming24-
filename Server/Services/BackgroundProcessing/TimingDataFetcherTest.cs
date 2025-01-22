@@ -11,6 +11,9 @@ public partial class TimingDataFetcherTest : ITimingDataFetcher
 {
     private readonly IOptions<TimingConfiguration> timingConfiguration;
 
+    private readonly JsonSerializerOptions jsonSerializerOptions = new() { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow };
+    private readonly JsonSerializerOptions jsonDesrializerOptions = new() { UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow };
+
     [GeneratedRegex("(?<dataType>[a-zA-Z_]+)-(?<date>[0-9]{4}-[0-9]{2}-[0-9]{2}T)(?<hour>[0-9]{2})-(?<minute>[0-9]{2})-(?<second>[0-9]{2}\\.[0-9]*)(?<timeZone>Z)\\.json", RegexOptions.CultureInvariant)]
     private static partial Regex matchPatternGeneratedRegex();
 
