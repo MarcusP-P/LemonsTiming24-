@@ -6,16 +6,12 @@ using System.Net.WebSockets;
 namespace LemonsTiming24.Server.Controllers;
 [Route("/api/v1/[controller]")]
 [ApiController]
-public class WebSocketController : ControllerBase
+public class WebSocketController(ILogger<WebSocketController> logger) : ControllerBase
 {
     private const string webSocketEndpoint = "/ws";
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Will probably use later.")]
-    private readonly ILogger<WebSocketController> logger;
-
-    public WebSocketController(ILogger<WebSocketController> logger)
-    {
-        this.logger = logger;
-    }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "<Pending>")]
+    private readonly ILogger<WebSocketController> logger = logger;
 
     [HttpGet]
     public WebSocketUrl Get()

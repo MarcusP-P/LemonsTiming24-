@@ -5,19 +5,15 @@ namespace LemonsTiming24.Server.Controllers;
 
 [ApiController]
 [Route("/api/v1/[controller]")]
-public class WeatherForecastController : ControllerBase
+public class WeatherForecastController(ILogger<WeatherForecastController> logger) : ControllerBase
 {
-    private static readonly string[] summaries = new[]
-    {
+    private static readonly string[] summaries =
+    [
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    ];
 
-    private readonly ILogger<WeatherForecastController> logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        this.logger = logger;
-    }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "<Pending>")]
+    private readonly ILogger<WeatherForecastController> logger = logger;
 
     [HttpGet(Name = "GetWeatherForecast")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5394:Do not use insecure randomness", Justification = "<Pending>")]

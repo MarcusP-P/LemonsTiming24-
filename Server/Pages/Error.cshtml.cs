@@ -6,18 +6,14 @@ namespace LemonsTiming24.Server.Pages;
 
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 [IgnoreAntiforgeryToken]
-public class ErrorModel : PageModel
+public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
 {
     public string? RequestId { get; set; }
 
     public bool ShowRequestId => !string.IsNullOrEmpty(this.RequestId);
 
-    private readonly ILogger<ErrorModel> logger;
-
-    public ErrorModel(ILogger<ErrorModel> logger)
-    {
-        this.logger = logger;
-    }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1823:Avoid unused private fields", Justification = "<Pending>")]
+    private readonly ILogger<ErrorModel> logger = logger;
 
     public void OnGet()
     {

@@ -1,12 +1,7 @@
 namespace LemonsTiming24.Server.Services.BackgroundProcessing;
-public class TimingDataFetcherHostedService : BackgroundService
+public class TimingDataFetcherHostedService(IServiceProvider serviceProvider) : BackgroundService
 {
-    private readonly IServiceProvider serviceProvider;
-
-    public TimingDataFetcherHostedService(IServiceProvider serviceProvider)
-    {
-        this.serviceProvider = serviceProvider;
-    }
+    private readonly IServiceProvider serviceProvider = serviceProvider;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

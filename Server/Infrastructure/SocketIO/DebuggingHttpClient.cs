@@ -15,10 +15,10 @@ public class DebuggingHttpClient : IHttpClient
 
     private readonly HttpClient httpClient;
 
-    private static readonly HashSet<string> allowedHeaders = new()
-    {
+    private static readonly HashSet<string> allowedHeaders =
+    [
         "user-agent",
-    };
+    ];
 
     public void AddHeader(string name, string value)
     {
@@ -55,7 +55,6 @@ public class DebuggingHttpClient : IHttpClient
         return this.httpClient.SendAsync(request, cancellationToken);
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1054:URI-like parameters should not be strings", Justification = "Implementation of an interface that uses a string.")]
     public Task<HttpResponseMessage> PostAsync(string requestUri,
         HttpContent content,
         CancellationToken cancellationToken)
